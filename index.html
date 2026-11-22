@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIMUNCAK — Pemilihan Rekomendasi Gunung Indonesia</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            royal: {
+              50: '#f0f6ff',
+              100: '#e0edff',
+              200: '#baddff',
+              300: '#7cc2ff',
+              400: '#36a3ff',
+              500: '#0c87f2',
+              600: '#0269cf',
+              700: '#0353a8',
+              800: '#07468a',
+              900: '#0c3b72',
+              950: '#08254b',
+            },
+            slateice: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Luxury Blue & White Atmospheric Background */
+    .alpine-canvas {
+      background-color: #f4f8fd;
+      background-image:
+        radial-gradient(at 0% 0%, rgba(12, 135, 242, 0.09) 0px, transparent 52%),
+        radial-gradient(at 100% 10%, rgba(3, 83, 168, 0.07) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(186, 221, 255, 0.25) 0px, transparent 55%);
+    }
+
+    /* Blue-White Gradient Heading with Subtle Depth Shadow */
+    .hero-gradient-text {
+      background: linear-gradient(135deg, #08254b 0%, #0269cf 52%, #36a3ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 18px rgba(2, 105, 207, 0.16));
+    }
+
+    /* Opening Splash Animations (Bottom -> Center -> Top Out) */
+    @keyframes splashLogoRise {
+      0% {
+        opacity: 0;
+        transform: translateY(56px) scale(0.94);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes splashExitUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+    }
+
+    .splash-enter {
+      animation: splashLogoRise 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .splash-exit {
+      animation: splashExitUp 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* Selectable Cards & Pill Buttons */
+    .option-radio:checked + .option-card {
+      border-color: #0269cf;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f6ff 100%);
+      box-shadow: 0 10px 24px -6px rgba(2, 105, 207, 0.18), 0 0 0 1px #0269cf;
+      transform: translateY(-1px);
+    }
+    .option-radio:checked + .option-card .check-badge {
+      background-color: #0269cf;
+      border-color: #0269cf;
+      color: #ffffff;
+    }
+    .option-radio:checked + .option-card .check-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .option-radio:checked + .option-card .option-icon-wrap {
+      background: linear-gradient(135deg, #0269cf 0%, #0c87f2 100%);
+      color: #ffffff;
+    }
+
+    /* Smooth View Transition */
+    @keyframes viewAppear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .page-animate {
+      animation: viewAppear 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Real Mountain Photo Smooth Fade-in & Hover Zoom */
+    .real-mountain-photo {
+      opacity: 0;
+      transition: opacity 0.55s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .real-mountain-photo.is-loaded {
+      opacity: 1;
+    }
+    .group:hover .real-mountain-photo.is-loaded {
+      transform: scale(1.04);
+    }
+  </style>
+</head>
+<body class="alpine-canvas text-slateice-900 min-h-screen flex flex-col antialiased selection:bg-royal-700 selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- 2. HALAMAN PEMBUKA (OPENING ANIMATION: BOTTOM -> CENTER -> TOP OUT)    -->
+  <!-- ===================================================================== -->
+  <div id="openingSplash" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-royal-950 via-royal-900 to-royal-700 text-white overflow-hidden">
+    <!-- Subtle Ambient Glow -->
+    <div class="absolute inset-0 pointer-events-none opacity-30" style="background-image: radial-gradient(circle at 50% 45%, #7cc2ff 0%, transparent 60%);"></div>
+
+    <div id="splashContent" class="splash-enter relative flex flex-col items-center text-center px-6">
+      <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-tr from-white/15 to-white/30 backdrop-blur-md border border-white/30 shadow-2xl flex items-center justify-center mb-5">
+        <svg class="w-11 h-11 sm:w-12 sm:h-12 text-white drop-shadow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+        </svg>
+      </div>
+      <span class="font-display font-extrabold text-3xl sm:text-5xl tracking-[0.18em] bg-gradient-to-b from-white via-royal-100 to-royal-300 bg-clip-text text-transparent drop-shadow-sm">
+        SIMUNCAK
+      </span>
+      <p class="mt-2.5 text-xs sm:text-sm tracking-widest uppercase text-royal-200 font-medium">
+        Pemilihan Rekomendasi Gunung Indonesia
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MINIMALIST BRAND HEADER (TANPA NAVIGASI BERANDA/PARAMETER/REKOMENDASI) -->
+  <!-- ===================================================================== -->
+  <header class="bg-white/85 backdrop-blur-md border-b border-royal-100/90 sticky top-0 z-30 shadow-[0_2px_16px_-4px_rgba(8,37,75,0.06)]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <button type="button" onclick="goToPage(1)" class="flex items-center gap-3 text-left group cursor-pointer focus:outline-none">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-royal-700 to-royal-500 text-white flex items-center justify-center shadow-md shadow-royal-600/20 group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-royal-950 via-royal-700 to-royal-500 bg-clip-text text-transparent block leading-none">
+            SIMUNCAK
+          </span>
+          <span class="text-[11px] text-slateice-700 font-medium tracking-wide block mt-1">
+            Sistem Rekomendasi Pendakian Nusantara
+          </span>
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col justify-center">
+
+    <!-- ===================================================================== -->
+    <!-- 3. HALAMAN BERANDA AWAL (IDENTITAS PENGGUNA)                          -->
+    <!-- ===================================================================== -->
+    <section id="page1" class="page-animate max-w-2xl w-full mx-auto space-y-8">
+      
+      <!-- B. Judul Utama & C. Deskripsi Pembuka (Rata Tengah, Tanpa Ikon Tambahan) -->
+      <div class="text-center space-y-4 px-2">
+        <h1 class="hero-gradient-text font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight uppercase">
+          SELAMAT DATANG DI SIMUNCAK
+        </h1>
+        <p class="text-sm sm:text-base text-slateice-700 max-w-xl mx-auto leading-relaxed">
+          Sebelum menentukan gunung tujuan terbaik untukmu, kenalan dulu yuk! Isi informasi singkat di bawah ini untuk memulai perjalananmu.
+        </p>
+      </div>
+
+      <!-- D. Formulir Identitas Pengguna -->
+      <div class="bg-white/95 backdrop-blur-sm rounded-2xl border border-royal-100 shadow-[0_20px_50px_-15px_rgba(7,70,138,0.12)] overflow-hidden">
+        <div class="h-1.5 w-full bg-gradient-to-r from-royal-900 via-royal-600 to-royal-400"></div>
+        
+        <form id="userProfileForm" class="p-6 sm:p-10 space-y-6" onsubmit="handlePage1Submit(event)">
+          <!-- Input 1: Nama -->
+          <div class="space-y-2">
+            <label for="userNameInput" class="block text-sm font-bold text-royal-950">
+              Nama <span class="text-royal-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="userNameInput"
+              placeholder="Masukkan nama panggilan atau nama lengkapmu"
+              class="w-full px-4 py-3.5 text-sm sm:text-base bg-slateice-50/70 focus:bg-white border border-slateice-300 rounded-xl focus:outline-none focus:border-royal-600 focus:ring-4 focus:ring-royal-500/15 transition-all text-slateice-900 placeholder:text-slateice-400"
+            />
+          </div>
+
+          <!-- Input 2: Gunung Berkesan / Ingin Dikunjungi -->
+          <div class="space-y-2">
+            <label for="memorableMountainInput" class="block text-sm font-bold text-royal-950 leading-snug">
+              Sebutkan 1 gunung paling berkesan yang pernah didaki. Jika belum pernah mendaki, gunung apa yang paling ingin kamu kunjungi? <span class="text-royal-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="memorableMountainInput"
+              list="mountainSuggestionsList"
+              placeholder="Ketik nama gunung di Indonesia maupun luar negeri (misal: Prau, Rinjani, Semeru, Fuji)"
+              class="w-full px-4 py-3.5 text-sm sm:text-base bg-slateice-50/70 focus:bg-white border border-slateice-300 rounded-xl focus:outline-none focus:border-royal-600 focus:ring-4 focus:ring-royal-500/15 transition-all text-slateice-900 placeholder:text-slateice-400"
+            />
+            <datalist id="mountainSuggestionsList"></datalist>
+          </div>
+
+          <!-- Inline Validation Alert -->
+          <div id="page1Alert" class="hidden rounded-xl bg-royal-50 border border-royal-300 px-4 py-3 text-royal-900 text-xs sm:text-sm flex items-center gap-2.5">
+            <i class="fa-solid fa-circle-info text-royal-600"></i>
+            <span id="page1AlertText">Mohon isi nama dan nama gunung terlebih dahulu sebelum mengirim.</span>
+          </div>
+
+          <!-- E. Tombol KIRIM dengan Ikon Paper Plane -->
+          <div class="pt-2">
+            <button type="submit" class="w-full bg-gradient-to-r from-royal-800 via-royal-600 to-royal-500 hover:from-royal-900 hover:via-royal-700 hover:to-royal-600 text-white font-display font-bold tracking-wider uppercase py-4 px-6 rounded-xl shadow-lg shadow-royal-600/25 hover:shadow-xl hover:shadow-royal-600/30 active:scale-[0.99] flex items-center justify-center gap-2.5 text-sm sm:text-base transition-all cursor-pointer">
+              <span>KIRIM</span>
+              <i class="fa-solid fa-paper-plane text-sm"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 4. HALAMAN PARAMETER PENDAKIAN                                        -->
+    <!-- ===================================================================== -->
+    <section id="page2" class="hidden page-animate max-w-4xl w-full mx-auto space-y-6">
+      
+      <!-- B. Tombol Ubah Profil di Bagian Paling Atas Sebelah Kanan -->
+      <div class="flex justify-end">
+        <button type="button" onclick="goToPage(1)" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-royal-800 hover:text-white bg-white hover:bg-royal-700 px-4 py-2.5 rounded-xl border border-royal-200 hover:border-royal-700 shadow-xs transition-all cursor-pointer">
+          <i class="fa-solid fa-user"></i>
+          <span>Ubah Profil</span>
+        </button>
+      </div>
+
+      <!-- C. Sambutan Pengguna & Kartu Interaktif Gunung Berkesan -->
+      <div class="bg-gradient-to-br from-royal-950 via-royal-800 to-royal-600 rounded-2xl p-6 sm:p-8 text-white shadow-[0_18px_40px_-12px_rgba(7,70,138,0.28)] space-y-5 relative overflow-hidden">
+        <!-- Latar Foto Gunung Pilihan Pengguna + Overlay Gradasi Biru -->
+        <div id="page2GreetingBgArtwork" class="absolute inset-0 opacity-45 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-royal-950/90 via-royal-900/75 to-royal-700/60 pointer-events-none"></div>
+        <div class="absolute -right-12 -top-12 w-52 h-52 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+        
+        <div class="relative space-y-2">
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">
+            Halo, <span id="greetingUserName" class="text-royal-200">Pendaki</span>!
+          </h2>
+          <p class="text-sm sm:text-base text-royal-100 leading-relaxed">
+            Kamu penasaran dengan gunung yang paling berkesan buat kamu?
+            <button type="button" onclick="openUserDreamMountainDetail(2)" class="inline-flex items-center gap-1.5 font-bold text-white underline decoration-royal-300 underline-offset-4 hover:text-royal-200 transition-colors cursor-pointer ml-1">
+              <span>Klik di sini untuk cari informasinya.</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </button>
+          </p>
+        </div>
+
+        <!-- Ringkasan Visual Gunung Pilihan Pengguna -->
+        <button type="button" onclick="openUserDreamMountainDetail(2)" class="relative w-full text-left group bg-white/12 hover:bg-white/20 backdrop-blur-md border border-white/25 rounded-xl p-4 flex items-center justify-between gap-4 transition-all cursor-pointer">
+          <div class="min-w-0 space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-[11px] uppercase tracking-wider text-royal-200 font-semibold">Gunung Pilihanmu</span>
+              <span id="page2DreamQuickBadge" class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white text-royal-900">
+                Cek Status
+              </span>
+            </div>
+            <p id="page2MemorableMountain" class="font-display font-bold text-base sm:text-lg text-white truncate">
+              Gunung Prau
+            </p>
+          </div>
+          <span class="w-9 h-9 rounded-lg bg-white text-royal-800 group-hover:scale-105 flex items-center justify-center flex-shrink-0 shadow-sm transition-transform">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </span>
+        </button>
+      </div>
+
+      <!-- D. Pengantar Rekomendasi (Pembagian Visual Jelas) -->
+      <div class="bg-white rounded-2xl border border-royal-100 px-6 py-4 shadow-xs flex items-center gap-3.5">
+        <div class="w-1.5 self-stretch rounded-full bg-gradient-to-b from-royal-600 to-royal-400 flex-shrink-0"></div>
+        <p class="text-sm sm:text-base font-medium text-slateice-800 leading-relaxed">
+          Atau kamu masih ragu-ragu dengan apa yang kamu pilih? Kami akan memberikan rekomendasi untuk kamu dengan mengisi kolom di bawah ini.
+        </p>
+      </div>
+
+      <!-- E. Form 5 Parameter Pendakian dengan Variasi Selectable Cards -->
+      <form id="mountainForm" class="bg-white rounded-2xl border border-royal-100 shadow-[0_16px_44px_-14px_rgba(7,70,138,0.1)] p-6 sm:p-8 space-y-8" onsubmit="handlePage2Submit(event)">
+        
+        <!-- 1. JENIS KELAMIN -->
+        <div class="space-y-3">
+          <label class="block text-sm sm:text-base font-display font-bold text-royal-950">
+            Jenis Kelamin <span class="text-royal-600">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <input type="radio" name="jk" id="jk1" value="1" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="jk1" class="option-card flex items-center justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div class="option-icon-wrap w-10 h-10 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-mars text-base"></i>
+                  </div>
+                  <div>
+                    <span class="block font-bold text-sm text-slateice-900">Laki-laki</span>
+                    <span class="text-xs text-slateice-700">Pendaki Pria</span>
+                  </div>
+                </div>
+                <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                  <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="jk" id="jk2" value="2" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="jk2" class="option-card flex items-center justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div class="option-icon-wrap w-10 h-10 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-venus text-base"></i>
+                  </div>
+                  <div>
+                    <span class="block font-bold text-sm text-slateice-900">Perempuan</span>
+                    <span class="text-xs text-slateice-700">Pendaki Wanita</span>
+                  </div>
+                </div>
+                <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                  <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-royal-100" />
+
+        <!-- 2. USIA PENDAKI -->
+        <div class="space-y-3">
+          <label class="block text-sm sm:text-base font-display font-bold text-royal-950">
+            Usia Pendaki <span class="text-royal-600">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <input type="radio" name="usia" id="usia1" value="1" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="usia1" class="option-card flex items-center justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div class="option-icon-wrap px-2.5 h-10 rounded-lg bg-royal-50 text-royal-700 font-mono text-xs font-bold flex items-center justify-center transition-colors">
+                    &lt;20
+                  </div>
+                  <div>
+                    <span class="block font-bold text-sm text-slateice-900">Di bawah 20 tahun</span>
+                    <span class="text-xs text-slateice-700">Kelompok usia remaja / pelajar</span>
+                  </div>
+                </div>
+                <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                  <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="usia" id="usia2" value="2" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="usia2" class="option-card flex items-center justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div class="option-icon-wrap px-2.5 h-10 rounded-lg bg-royal-50 text-royal-700 font-mono text-xs font-bold flex items-center justify-center transition-colors">
+                    20+
+                  </div>
+                  <div>
+                    <span class="block font-bold text-sm text-slateice-900">20 tahun ke atas</span>
+                    <span class="text-xs text-slateice-700">Kelompok usia dewasa</span>
+                  </div>
+                </div>
+                <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                  <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-royal-100" />
+
+        <!-- 3. PENGALAMAN MENDAKI -->
+        <div class="space-y-3">
+          <label class="block text-sm sm:text-base font-display font-bold text-royal-950">
+            Pengalaman Mendaki <span class="text-royal-600">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <input type="radio" name="pengalaman" id="peng1" value="1" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="peng1" class="option-card flex flex-col justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all h-full gap-3">
+                <div class="flex items-center justify-between">
+                  <div class="option-icon-wrap w-9 h-9 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-seedling text-sm"></i>
+                  </div>
+                  <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                  </span>
+                </div>
+                <div>
+                  <span class="block font-bold text-sm text-slateice-900">Baru pertama kali</span>
+                  <span class="text-xs text-slateice-700 mt-0.5 block">Belum memiliki riwayat pendakian</span>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="pengalaman" id="peng2" value="2" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="peng2" class="option-card flex flex-col justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all h-full gap-3">
+                <div class="flex items-center justify-between">
+                  <div class="option-icon-wrap w-9 h-9 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-person-hiking text-sm"></i>
+                  </div>
+                  <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                  </span>
+                </div>
+                <div>
+                  <span class="block font-bold text-sm text-slateice-900">Sudah pernah</span>
+                  <span class="text-xs text-slateice-700 mt-0.5 block">Pernah mendaki beberapa kali</span>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="pengalaman" id="peng3" value="3" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="peng3" class="option-card flex flex-col justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all h-full gap-3">
+                <div class="flex items-center justify-between">
+                  <div class="option-icon-wrap w-9 h-9 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-mountain-sun text-sm"></i>
+                  </div>
+                  <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                  </span>
+                </div>
+                <div>
+                  <span class="block font-bold text-sm text-slateice-900">Sering</span>
+                  <span class="text-xs text-slateice-700 mt-0.5 block">Rutin mendaki berbagai medan</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-royal-100" />
+
+        <!-- 4. KETINGGIAN TERTINGGI YANG PERNAH DIDAKI -->
+        <div class="space-y-3">
+          <label class="block text-sm sm:text-base font-display font-bold text-royal-950">
+            Ketinggian Tertinggi yang Pernah Didaki <span class="text-royal-600">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <input type="radio" name="ketinggian" id="tinggi1" value="1" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="tinggi1" class="option-card flex flex-col justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all h-full gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-xs font-bold text-royal-700 bg-royal-50 px-2.5 py-1 rounded-md">0 MDPL</span>
+                  <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                  </span>
+                </div>
+                <div>
+                  <span class="block font-bold text-sm text-slateice-900">Belum pernah</span>
+                  <span class="text-xs text-slateice-700 mt-0.5 block">Pendakian perdana</span>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="ketinggian" id="tinggi2" value="2" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="tinggi2" class="option-card flex flex-col justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all h-full gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-xs font-bold text-royal-700 bg-royal-50 px-2.5 py-1 rounded-md">&lt; 2.500 MDPL</span>
+                  <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                  </span>
+                </div>
+                <div>
+                  <span class="block font-bold text-sm text-slateice-900">Di bawah 2.500 mdpl</span>
+                  <span class="text-xs text-slateice-700 mt-0.5 block">Elevasi puncak di bawah 2.500 mdpl</span>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="ketinggian" id="tinggi3" value="3" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="tinggi3" class="option-card flex flex-col justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all h-full gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-xs font-bold text-royal-700 bg-royal-50 px-2.5 py-1 rounded-md">&gt; 2.500 MDPL</span>
+                  <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                  </span>
+                </div>
+                <div>
+                  <span class="block font-bold text-sm text-slateice-900">Di atas 2.500 mdpl</span>
+                  <span class="text-xs text-slateice-700 mt-0.5 block">Elevasi puncak di atas 2.500 mdpl</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-royal-100" />
+
+        <!-- 5. JENIS PENDAKIAN YANG INGIN DICOBA -->
+        <div class="space-y-3">
+          <label class="block text-sm sm:text-base font-display font-bold text-royal-950">
+            Jenis Pendakian yang Ingin Dicoba <span class="text-royal-600">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <input type="radio" name="jenis" id="jenis1" value="1" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="jenis1" class="option-card flex items-center justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div class="option-icon-wrap w-10 h-10 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center flex-shrink-0 transition-colors">
+                    <i class="fa-solid fa-bolt text-base"></i>
+                  </div>
+                  <div>
+                    <span class="block font-bold text-sm text-slateice-900">Tektok</span>
+                    <span class="text-xs text-slateice-700">Pendakian pulang-pergi dalam satu hari tanpa mendirikan tenda</span>
+                  </div>
+                </div>
+                <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center flex-shrink-0 ml-3 transition-all">
+                  <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="jenis" id="jenis2" value="2" class="sr-only option-radio" onchange="clearPage2Alert()">
+              <label for="jenis2" class="option-card flex items-center justify-between p-4 rounded-xl border border-slateice-200 bg-slateice-50/40 cursor-pointer hover:border-royal-400 transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div class="option-icon-wrap w-10 h-10 rounded-lg bg-royal-50 text-royal-700 flex items-center justify-center flex-shrink-0 transition-colors">
+                    <i class="fa-solid fa-campground text-base"></i>
+                  </div>
+                  <div>
+                    <span class="block font-bold text-sm text-slateice-900">Camping</span>
+                    <span class="text-xs text-slateice-700">Pendakian bermalam dengan mendirikan tenda di area camp</span>
+                  </div>
+                </div>
+                <span class="check-badge w-6 h-6 rounded-full border border-slateice-300 flex items-center justify-center flex-shrink-0 ml-3 transition-all">
+                  <i class="fa-solid fa-check check-icon text-[11px] opacity-0 scale-50 transition-all"></i>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inline Validation Box Page 2 -->
+        <div id="page2Alert" class="hidden rounded-xl bg-royal-50 border border-royal-300 px-4 py-3 text-royal-900 text-xs sm:text-sm flex items-center gap-2.5">
+          <i class="fa-solid fa-circle-info text-royal-600"></i>
+          <span id="page2AlertText">Mohon lengkapi seluruh 5 parameter pendakian sebelum melihat hasil rekomendasi.</span>
+        </div>
+
+        <!-- F. Tombol Navigasi (Kembali + Kirim & Lihat Rekomendasi) -->
+        <div class="pt-2 flex flex-col-reverse sm:flex-row gap-3.5">
+          <button type="button" onclick="goToPage(1)" class="sm:w-auto bg-slateice-100 hover:bg-slateice-200/80 text-slateice-800 font-semibold py-3.5 px-6 rounded-xl border border-slateice-200 flex items-center justify-center gap-2 transition-colors cursor-pointer">
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+            <span>Kembali</span>
+          </button>
+
+          <button type="submit" class="flex-1 bg-gradient-to-r from-royal-800 via-royal-600 to-royal-500 hover:from-royal-900 hover:via-royal-700 hover:to-royal-600 text-white font-display font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-royal-600/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer">
+            <span>Kirim &amp; Lihat Rekomendasi</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 5. HALAMAN HASIL REKOMENDASI GUNUNG                                   -->
+    <!-- ===================================================================== -->
+    <section id="page3" class="hidden page-animate max-w-5xl w-full mx-auto space-y-7">
+      
+      <!-- A. Sambutan Berdasarkan Pengalaman Pendakian -->
+      <div class="bg-gradient-to-r from-royal-950 via-royal-800 to-royal-600 rounded-2xl p-6 sm:p-8 text-white shadow-[0_18px_40px_-12px_rgba(7,70,138,0.28)] relative overflow-hidden">
+        <div class="absolute right-0 bottom-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative space-y-2">
+          <span class="inline-block font-mono text-[11px] uppercase tracking-widest text-royal-200 bg-white/10 px-3 py-1 rounded-full border border-white/15">
+            Hasil Analisis Profil Pendaki
+          </span>
+          <h2 id="experienceGreetingText" class="font-display text-xl sm:text-3xl font-extrabold leading-snug">
+            Wah, kamu mau mencoba mendaki ya? Berikut hasil rekomendasi gunung untuk kamu!
+          </h2>
+        </div>
+      </div>
+
+      <!-- B. Ringkasan Parameter Pengguna (Nama, JK, Usia, Pengalaman, Ketinggian, Jenis) -->
+      <div class="bg-white rounded-2xl border border-royal-100 p-5 sm:p-7 shadow-xs space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-royal-100 pb-3.5">
+          <h3 class="font-display font-bold text-royal-950 text-base sm:text-lg">
+            Ringkasan Profil &amp; Parameter Pendaki
+          </h3>
+          <button type="button" onclick="openUserDreamMountainDetail(3)" class="inline-flex items-center gap-2 text-xs font-semibold text-royal-700 hover:text-royal-900 bg-royal-50 hover:bg-royal-100 px-3 py-1.5 rounded-lg border border-royal-200 transition-colors cursor-pointer">
+            <span>Cek Info Gunung Pilihan: <strong id="resultMemorableMountainInline">Gunung Prau</strong></span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          </button>
+        </div>
+
+        <div id="resultParameterGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <!-- 6 Parameter Cards populated dynamically -->
+        </div>
+      </div>
+
+      <!-- INVALID COMBINATION ALERT CARD -->
+      <div id="invalidResultCard" class="hidden bg-white rounded-2xl border border-royal-200 p-6 sm:p-8 shadow-sm space-y-5">
+        <div class="space-y-2.5">
+          <div class="inline-flex items-center gap-2 text-xs font-mono font-semibold text-royal-800 bg-royal-50 px-3 py-1 rounded-lg border border-royal-200">
+            <i class="fa-solid fa-triangle-exclamation text-royal-600"></i> VALIDASI PARAMETER TIDAK SESUAI
+          </div>
+          <h3 class="font-display font-bold text-royal-950 text-lg sm:text-xl">
+            Kombinasi Pengalaman &amp; Ketinggian Belum Selaras
+          </h3>
+          <p class="text-sm text-slateice-700 leading-relaxed">
+            Sistem tidak dapat menyusun rekomendasi gunung karena terdapat ketidaksesuaian antara variabel <strong>Pengalaman Mendaki</strong> dan <strong>Ketinggian Tertinggi yang Pernah Didaki</strong>:
+          </p>
+          <ul class="text-xs sm:text-sm text-slateice-700 space-y-1.5 list-disc pl-5 pt-1">
+            <li>Jika Anda memilih <strong>"Baru pertama kali"</strong> mendaki, maka ketinggian tertinggi yang pernah didaki harus <strong>"Belum pernah"</strong>.</li>
+            <li>Sebaliknya, jika Anda memilih <strong>"Sudah pernah"</strong> atau <strong>"Sering"</strong> mendaki, maka ketinggian tertinggi tidak boleh <strong>"Belum pernah"</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="pt-3 border-t border-royal-100">
+          <button type="button" onclick="goToPage(2)" class="bg-gradient-to-r from-royal-800 to-royal-600 hover:from-royal-900 hover:to-royal-700 text-white font-semibold py-3 px-5 rounded-xl text-sm inline-flex items-center gap-2 shadow-sm transition-all cursor-pointer">
+            <i class="fa-solid fa-sliders text-xs"></i>
+            <span>Perbaiki Parameter Pendakian</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- VALID RECOMMENDATIONS CONTAINER (C. 1 Rekomendasi Utama + D. 4 Alternatif) -->
+      <div id="validResultCard" class="hidden space-y-8">
+        
+        <!-- C. REKOMENDASI GUNUNG UTAMA (HERO FEATURED CARD) -->
+        <div id="primaryRecommendationContainer">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- D. EMPAT REKOMENDASI ALTERNATIF -->
+        <div class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-1">
+            <div>
+              <h3 class="font-display font-bold text-royal-950 text-lg sm:text-xl">
+                Empat Rekomendasi Alternatif Lainnya
+              </h3>
+              <p class="text-xs sm:text-sm text-slateice-700">
+                Disusun berdasarkan tingkat kesesuaian dengan profil dan gaya pendakianmu. Klik kartu gunung untuk melihat detail lengkap.
+              </p>
+            </div>
+          </div>
+
+          <div id="alternativeMountainsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 4 Alternative Cards rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM NAVIGATION CONTROLS -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+        <button type="button" onclick="goToPage(2)" class="bg-white hover:bg-royal-50 text-royal-900 font-semibold py-3.5 px-6 rounded-xl border border-royal-200 text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
+          <i class="fa-solid fa-sliders text-xs text-royal-600"></i>
+          <span>Ubah Parameter</span>
+        </button>
+
+        <button type="button" onclick="restartFromHome()" class="bg-gradient-to-r from-royal-800 to-royal-600 hover:from-royal-900 hover:to-royal-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-md shadow-royal-600/20 text-sm flex items-center justify-center gap-2 transition-all cursor-pointer">
+          <i class="fa-solid fa-rotate-left text-xs"></i>
+          <span>Mulai Ulang dari Beranda</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 6. HALAMAN DETAIL INFORMASI GUNUNG                                    -->
+    <!-- ===================================================================== -->
+    <section id="page4" class="hidden page-animate max-w-5xl w-full mx-auto space-y-6">
+      
+      <!-- Top Back Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <button type="button" id="detailBackButton" onclick="handleDetailBack()" class="inline-flex items-center gap-2 bg-white hover:bg-royal-50 text-royal-900 font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl border border-royal-200 shadow-xs transition-colors cursor-pointer">
+          <i class="fa-solid fa-arrow-left text-xs text-royal-600"></i>
+          <span id="detailBackLabel">Kembali</span>
+        </button>
+
+        <span id="detailSourcePill" class="font-mono text-xs font-semibold px-3.5 py-1.5 rounded-full bg-royal-50 text-royal-800 border border-royal-200">
+          Profil Destinasi Gunung
+        </span>
+      </div>
+
+      <!-- Main Dossier Card -->
+      <div class="bg-white rounded-2xl border border-royal-100 overflow-hidden shadow-[0_20px_50px_-15px_rgba(7,70,138,0.12)]">
+        
+        <!-- Mountain Visual Banner -->
+        <div id="detailHeroBanner" class="relative h-60 sm:h-80 w-full overflow-hidden border-b border-royal-100 bg-royal-950">
+          <!-- Dynamic Real Mountain Photo + Alpine Fallback Layer -->
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-8">
+          
+          <!-- Header Title & Elevation Spec -->
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-royal-100 pb-6">
+            <div class="space-y-1.5">
+              <p id="detailLocation" class="text-xs sm:text-sm font-semibold text-royal-600 flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot"></i> Dataran Tinggi Dieng, Jawa Tengah
+              </p>
+              <h2 id="detailMountainName" class="font-display text-2xl sm:text-4xl font-extrabold tracking-tight text-royal-950">
+                Gunung Prau
+              </h2>
+              <p id="detailLevel" class="text-xs sm:text-sm text-slateice-700 font-medium">
+                Pemula - Menengah • Estimasi waktu tempuh ± 2,5 - 3,5 Jam
+              </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-royal-50 to-white border border-royal-200 rounded-xl px-5 py-3 text-left sm:text-right flex-shrink-0 shadow-xs">
+              <span class="block font-mono text-[10px] uppercase tracking-wider text-royal-700 font-semibold">Elevasi Puncak</span>
+              <span id="detailMdpl" class="font-mono font-bold text-base sm:text-xl text-royal-900">2.590 MDPL</span>
+            </div>
+          </div>
+
+          <!-- 3 STATUS SPECIFICATION BLOCKS -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Status 1: Keberadaan di Indonesia -->
+            <div id="statusIndonesiaCard" class="rounded-xl p-4 border border-royal-200 bg-royal-50/60 space-y-1.5">
+              <span class="block font-mono text-[11px] uppercase tracking-wider text-royal-700 font-semibold">Keberadaan Wilayah</span>
+              <p id="detailIndonesiaStatus" class="font-display font-bold text-sm sm:text-base text-royal-950">
+                Ada di Indonesia
+              </p>
+              <p id="detailIndonesiaNote" class="text-xs text-slateice-700 leading-relaxed">
+                Berada di wilayah Negara Kesatuan Republik Indonesia.
+              </p>
+            </div>
+
+            <!-- Status 2: Status Jalur Pendakian -->
+            <div id="statusHikeCard" class="rounded-xl p-4 border border-royal-200 bg-royal-50/60 space-y-1.5">
+              <span class="block font-mono text-[11px] uppercase tracking-wider text-royal-700 font-semibold">Status Pendakian</span>
+              <p id="detailHikeStatus" class="font-display font-bold text-sm sm:text-base text-royal-950">
+                Dibuka untuk Umum
+              </p>
+              <p id="detailHikeNote" class="text-xs text-slateice-700 leading-relaxed">
+                Registrasi langsung di basecamp resmi atau booking daring sesuai kuota.
+              </p>
+            </div>
+
+            <!-- Status 3: Status Gunung -->
+            <div id="statusVolcanoCard" class="rounded-xl p-4 border border-royal-200 bg-royal-50/60 space-y-1.5">
+              <span class="block font-mono text-[11px] uppercase tracking-wider text-royal-700 font-semibold">Status Aktivitas Gunung</span>
+              <p id="detailVolcanoStatus" class="font-display font-bold text-sm sm:text-base text-royal-950">
+                Gunung Non-Aktif
+              </p>
+              <p id="detailVolcanoNote" class="text-xs text-slateice-700 leading-relaxed">
+                Kondisi geologi stabil dan aman untuk aktivitas pendakian.
+              </p>
+            </div>
+          </div>
+
+          <!-- VIA RESMI & ESTIMASI HTM -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="rounded-xl border border-royal-100 bg-slateice-50/40 p-5 space-y-3">
+              <h3 class="font-display font-bold text-royal-950 text-base border-b border-royal-100 pb-2.5 flex items-center gap-2">
+                <i class="fa-solid fa-route text-royal-600 text-sm"></i>
+                <span>Jalur Pendakian (Via Resmi)</span>
+              </h3>
+              <ul id="detailViaList" class="space-y-2 text-xs sm:text-sm text-slateice-800">
+                <!-- Populated dynamically -->
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-royal-100 bg-slateice-50/40 p-5 space-y-3">
+              <h3 class="font-display font-bold text-royal-950 text-base border-b border-royal-100 pb-2.5 flex items-center gap-2">
+                <i class="fa-solid fa-ticket text-royal-600 text-sm"></i>
+                <span>Estimasi HTM &amp; Simaksi</span>
+              </h3>
+              <div id="detailHtmBox" class="space-y-2 text-xs sm:text-sm text-slateice-800">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- PENGETAHUAN & CATATAN KESELAMATAN -->
+          <div class="rounded-xl border border-royal-100 bg-gradient-to-br from-royal-50/70 to-white p-5 sm:p-6 space-y-3">
+            <h3 class="font-display font-bold text-royal-950 text-base flex items-center gap-2">
+              <i class="fa-solid fa-book-open text-royal-600 text-sm"></i>
+              <span>Pengetahuan &amp; Karakteristik Gunung</span>
+            </h3>
+            <p id="detailKnowledge" class="text-xs sm:text-sm text-slateice-800 leading-relaxed">
+              <!-- Populated dynamically -->
+            </p>
+            <div class="pt-3 border-t border-royal-100 text-xs sm:text-sm text-slateice-800">
+              <p id="detailTips" class="leading-relaxed">
+                <!-- Populated dynamically -->
+              </p>
+            </div>
+          </div>
+
+          <!-- PETA LOKASI GOOGLE MAPS -->
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="font-display font-bold text-royal-950 text-base flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot text-royal-600 text-sm"></i>
+                <span>Peta Lokasi Geografis</span>
+              </h3>
+              <a id="detailMapsExternalLink" href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-royal-800 hover:text-white bg-royal-50 hover:bg-royal-700 px-3.5 py-2 rounded-lg border border-royal-200 hover:border-royal-700 transition-colors">
+                <span>Buka di Google Maps</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              </a>
+            </div>
+            <div class="w-full h-64 sm:h-80 rounded-xl overflow-hidden border border-royal-200 bg-slateice-100 shadow-inner">
+              <iframe
+                id="detailMapsIframe"
+                title="Peta Lokasi Gunung"
+                class="w-full h-full border-0"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="">
+              </iframe>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ELEGANT FOOTER -->
+  <footer class="bg-white/90 border-t border-royal-100 mt-14 py-6">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slateice-700">
+      <p class="font-display font-bold text-royal-950">SIMUNCAK — Pemilihan Rekomendasi Gunung Indonesia</p>
+      <p>Sistem Informasi Perencanaan &amp; Rekomendasi Pendakian Nusantara</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // =========================================================================
+    // 0. OPENING ANIMATION CONTROLLER (BOTTOM -> CENTER -> TOP OUT)
+    // =========================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      const splash = document.getElementById("openingSplash");
+      if (!splash) return;
+
+      // Durasi tampil ~2 detik lalu bergerak menghilang ke atas
+      setTimeout(() => {
+        splash.classList.add("splash-exit");
+        setTimeout(() => {
+          splash.style.display = "none";
+        }, 650);
+      }, 2000);
+    });
+
+    // =========================================================================
+    // 1. DATABASE LENGKAP GUNUNG INDONESIA & LUAR NEGERI
+    // =========================================================================
+    const MOUNTAIN_DATA = {
+      "Gunung Andong": {
+        aliases: ["andong"],
+        wikiQuery: "Gunung Andong Magelang",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Magelang, Jawa Tengah",
+        mdpl: "1.726 MDPL",
+        level: "Ramah Pemula • Estimasi ± 2 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka 24 jam setiap hari dengan registrasi langsung di pos basecamp resmi.",
+        statusGunung: "Gunung Perisai Tidak Aktif (Dormant)",
+        catatanGunung: "Tipe gunung perisai non-aktif; aman untuk pendakian pemula maupun latihan fisik.",
+        theme: "azure",
+        viaResmi: ["Via Sawit (Ngablak)", "Via Pendem", "Via Gogik", "Via Temu", "Via Kudusan"],
+        htm: "Rp 20.000 – Rp 25.000 / orang (sudah termasuk tiket masuk & asuransi lokal; parkir motor ± Rp 5.000).",
+        karakter: "Jalur pendakian tertata baik dengan empat puncak berjajar (Makam, Jiwa, Andong, Alap-alap) dan panorama 360 derajat pegunungan Jawa Tengah seperti Merbabu, Merapi, Sindoro, dan Sumbing.",
+        tips: "Ideal untuk pendakian tektok subuh mengejar matahari terbit maupun camping ringan; bawa jaket penahan angin karena hembusan angin puncak cukup kencang."
+      },
+      "Gunung Nglanggeran": {
+        aliases: ["nglanggeran", "gunung api purba nglanggeran"],
+        wikiQuery: "Gunung Api Purba Nglanggeran",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Gunungkidul, D.I. Yogyakarta",
+        mdpl: "700 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1 - 1,5 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari (pagi hingga sore untuk kunjungan harian, 24 jam untuk camping terjadwal).",
+        statusGunung: "Gunung Api Purba (Tidak Aktif)",
+        catatanGunung: "Gunung api purba berumur ± 60 juta tahun dan merupakan bagian dari UNESCO Global Geopark Gunung Sewu.",
+        theme: "sapphire",
+        viaResmi: ["Via Pendopo Kalisong (Desa Wisata Nglanggeran)"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (tiket wisata kawasan geopark; biaya camping & parkir terpisah).",
+        karakter: "Gunung api purba berbatu andesit raksasa dengan jalur singkat, lorong batu sempit, tangga kayu, serta pemandangan matahari terbit dan Embung Nglanggeran dari ketinggian.",
+        tips: "Gunakan sepatu dengan daya cengkeram baik karena jalur melewati sela-sela batu besar dan tangga kayu yang dapat menjadi licin saat hujan."
+      },
+      "Gunung Telomoyo": {
+        aliases: ["telomoyo"],
+        wikiQuery: "Gunung Telomoyo",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Magelang & Semarang, Jawa Tengah",
+        mdpl: "1.894 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1,5 - 2 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari; tersedia jalur pendakian jalan kaki maupun akses kendaraan khusus wisata.",
+        statusGunung: "Stratovolcano Tidak Aktif",
+        catatanGunung: "Belum pernah tercatat meletus dalam sejarah modern; kondisi geologi aman.",
+        theme: "glacier",
+        viaResmi: ["Via Arsal (Salaran, Ngablak)", "Via Dalangan (Kopeng)", "Via Pagergedog"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (tiket masuk kawasan wisata; biaya terpisah bila menggunakan ojek/sewa jip).",
+        karakter: "Jalur landai berkelok dengan akses terbuka dan lanskap luas menghadap Gunung Merbabu, Andong, Sumbing, Ungaran, serta danau Rawa Pening.",
+        tips: "Sangat sesuai bagi pendaki pemula yang ingin melatih ritme jalan menanjak konstan dengan pemandangan terbuka."
+      },
+      "Gunung Ungaran": {
+        aliases: ["ungaran"],
+        wikiQuery: "Gunung Ungaran",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Semarang, Jawa Tengah",
+        mdpl: "2.050 MDPL",
+        level: "Pemula - Menengah • Estimasi ± 3 - 4 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari dengan registrasi wajib di pos basecamp resmi.",
+        statusGunung: "Stratovolcano Istirahat (Tipe B)",
+        catatanGunung: "Memiliki manifestasi panas bumi (Gedongsongo) namun aktivitas vulkanik tenang dan aman didaki.",
+        theme: "cobalt",
+        viaResmi: ["Via Basecamp Mawar (Bandungan)", "Via Perantunan", "Via Gedongsongo", "Via Promasan"],
+        htm: "Rp 20.000 – Rp 30.000 / orang (registrasi pendakian basecamp & parkir).",
+        karakter: "Menawarkan kesejukan hutan pinus, hamparan kebun teh Medini yang asri, serta puncak berbatu dengan pemandangan Rawa Pening dan pesisir Laut Jawa.",
+        tips: "Sumber air cukup melimpah di jalur Mawar dan Promasan; perhatikan rambu penunjuk arah saat kabut tebal turun di area puncak."
+      },
+      "Gunung Panderman": {
+        aliases: ["panderman"],
+        wikiQuery: "Gunung Panderman",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Kota Batu, Jawa Timur",
+        mdpl: "2.045 MDPL",
+        level: "Ramah Pemula • Estimasi ± 2,5 - 3 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari untuk pendakian tektok maupun camping di area Latar Ombo.",
+        statusGunung: "Gunung Non-Aktif (Kompleks Putri Tidur)",
+        catatanGunung: "Bagian dari rangkaian pegunungan Kawi–Butak–Panderman dengan status geologi aman.",
+        theme: "cobalt",
+        viaResmi: ["Via Toyomerto (Desa Pesanggrahan, Kota Batu)"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (tiket simaksi LMDH & parkir kendaraan di basecamp).",
+        karakter: "Trek hutan teduh dengan tanjakan bertahap yang ideal untuk latihan fisik maupun menikmati pemandangan Kota Batu dari Puncak Basundara.",
+        tips: "Waspadai satwa liar (monyet ekor panjang) di sekitar pos dan area camp; simpan logistik makanan rapat di dalam tenda atau ransel."
+      },
+      "Gunung Prau": {
+        aliases: ["prau", "prahu"],
+        wikiQuery: "Gunung Prau Dieng",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Dataran Tinggi Dieng, Jawa Tengah",
+        mdpl: "2.590 MDPL",
+        level: "Pemula - Menengah • Estimasi ± 2,5 - 3,5 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka sepanjang tahun kecuali masa pemulihan ekosistem berkala (umumnya awal tahun).",
+        statusGunung: "Gunung Non-Aktif (Kompleks Vulkanik Dieng)",
+        catatanGunung: "Status geologi aman; wajib mematuhi batas area pendirian tenda untuk menjaga kelestarian vegetasi sabana.",
+        theme: "azure",
+        viaResmi: ["Via Patak Banteng", "Via Dieng Kulon", "Via Dwarawati", "Via Kalilembu", "Via Igirmranak", "Via Wates"],
+        htm: "Rp 30.000 – Rp 35.000 / orang (termasuk tiket masuk & asuransi; fasilitas toilet/air tersedia di basecamp).",
+        karakter: "Dikenal dengan padang sabana luas, bukit teletubbies, pemandangan matahari terbit, serta panorama deretan gunung Sindoro, Sumbing, Merbabu, Merapi, dan Slamet.",
+        tips: "Suhu malam di kawasan Dieng dapat turun mendekati 2–5°C; wajib membawa kantung tidur (sleeping bag) hangat dan pakaian berlapis."
+      },
+      "Gunung Bismo": {
+        aliases: ["bismo"],
+        wikiQuery: "Gunung Bismo Wonosobo",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Wonosobo, Jawa Tengah",
+        mdpl: "2.365 MDPL",
+        level: "Pemula - Menengah • Estimasi ± 2 - 3 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari melalui beberapa basecamp resmi di kawasan Dieng.",
+        statusGunung: "Gunung Vulkanik Tua (Tidak Aktif)",
+        catatanGunung: "Bekas kaldera purba di kawasan Dieng dengan kondisi geologi stabil dan aman.",
+        theme: "azure",
+        viaResmi: ["Via Silandak", "Via Sikunang", "Via Maron", "Via Pulosari", "Via Deroduwur"],
+        htm: "Rp 20.000 – Rp 25.000 / orang (registrasi basecamp & parkir).",
+        karakter: "Memiliki jalur punggungan sempit di kawasan Dieng dengan waktu tempuh relatif singkat, sabana luas, dan pemandangan kawah purba serta Telaga Menjer.",
+        tips: "Via Sikunang menawarkan jalur punggungan paling singkat menuju puncak; berhati-hati saat melintasi punggungan terbuka ketika angin kencang."
+      },
+      "Gunung Pakuwaja": {
+        aliases: ["pakuwaja", "pakuwojo"],
+        wikiQuery: "Gunung Pakuwaja Dieng",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Wonosobo, Jawa Tengah",
+        mdpl: "2.421 MDPL",
+        level: "Pemula - Menengah • Estimasi ± 2,5 - 3 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari dengan registrasi wajib di basecamp resmi.",
+        statusGunung: "Gunung Vulkanik Tua (Tidak Aktif)",
+        catatanGunung: "Termasuk dalam gugusan pegunungan dataran tinggi Dieng dengan status geologi aman.",
+        theme: "glacier",
+        viaResmi: ["Via Sembungan", "Via Parikesit", "Via Sikunang"],
+        htm: "Rp 20.000 – Rp 25.000 / orang (tiket simaksi basecamp).",
+        karakter: "Puncak berbatu vertikal khas di kawasan Dieng dengan suasana lebih tenang dibanding Prau, sabana alami, dan pemandangan Telaga Warna dari ketinggian.",
+        tips: "Sangat sesuai bagi pendaki yang mengutamakan suasana tenang di kawasan Dieng; siapkan pakaian hangat untuk suhu malam."
+      },
+      "Gunung Kembang": {
+        aliases: ["kembang"],
+        wikiQuery: "Gunung Kembang Wonosobo",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Wonosobo, Jawa Tengah",
+        mdpl: "2.340 MDPL",
+        level: "Menengah • Estimasi ± 3 - 4 Jam",
+        statusPendakian: "Dibuka untuk Umum (Aturan Ketat Bebas Sampah)",
+        catatanPendakian: "Buka setiap hari dengan pemeriksaan logistik wajib di basecamp untuk mencegah sampah.",
+        statusGunung: "Anak Gunung Sindoro (Tidak Aktif)",
+        catatanGunung: "Kerucut vulkanik di lereng Sindoro dengan status geologi aman.",
+        theme: "sapphire",
+        viaResmi: ["Via Blembem (Kaliurip, Damarkasiyan)", "Via Lengkong"],
+        htm: "Rp 25.000 – Rp 35.000 / orang (termasuk fasilitas minuman selamat datang & pemeriksaan logistik).",
+        karakter: "Dikenal dengan tata kelola kebersihan basecamp Blembem yang sangat disiplin, memiliki jalur tanjakan konsisten melalui sabana ilalang menuju kawah hijau di puncaknya.",
+        tips: "Dilarang membawa tisu basah; seluruh kemasan logistik dicatat saat keberangkatan dan diperiksa kembali saat turun."
+      },
+      "Gunung Mongkrang": {
+        aliases: ["mongkrang", "bukit mongkrang"],
+        wikiQuery: "Bukit Mongkrang Lawu",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Karanganyar, Jawa Tengah",
+        mdpl: "2.194 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1,5 - 2 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari (pagi hingga sore untuk tektok dan 24 jam untuk camping).",
+        statusGunung: "Punggungan Selatan Gunung Lawu (Non-Aktif)",
+        catatanGunung: "Bukit sabana di sisi selatan Lawu dengan kondisi geologi aman.",
+        theme: "glacier",
+        viaResmi: ["Via Tlogo Dringo (Gondosuli, Tawangmangu)"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (tiket masuk wisata & parkir).",
+        karakter: "Bukit ilalang di sisi selatan Gunung Lawu dengan jalur punggungan terbuka yang populer untuk pendakian tektok dan menikmati kemegahan puncak Lawu dari jarak dekat.",
+        tips: "Jalur sangat terbuka tanpa banyak kanopi pohon; gunakan pelindung matahari saat siang dan jaket hangat saat subuh."
+      },
+      "Gunung Penanggungan": {
+        aliases: ["penanggungan", "pawitra"],
+        wikiQuery: "Gunung Penanggungan",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Mojokerto & Pasuruan, Jawa Timur",
+        mdpl: "1.653 MDPL",
+        level: "Menengah • Estimasi ± 3 - 4 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari melalui beberapa pos pendakian resmi.",
+        statusGunung: "Stratovolcano Istirahat (Tidak Aktif)",
+        catatanGunung: "Memiliki nilai cagar budaya tinggi (Gunung Pawitra); status vulkanik tenang.",
+        theme: "sapphire",
+        viaResmi: ["Via Tamiajeng (Trawas)", "Via Jolotundo", "Via Kedungudi", "Via Wonosunyo"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (tiket masuk wisata & simaksi).",
+        karakter: "Memiliki bentuk kerucut menyerupai Semeru dengan puluhan situs candi peninggalan Majapahit di sepanjang lereng serta puncak berbatu dan berpasir.",
+        tips: "Trek menjelang puncak cukup curam berbatu/kerikil; jaga kelestarian seluruh situs cagar budaya di sepanjang jalur."
+      },
+      "Gunung Guntur": {
+        aliases: ["guntur"],
+        wikiQuery: "Gunung Guntur Garut",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Garut, Jawa Barat",
+        mdpl: "2.249 MDPL",
+        level: "Menengah • Estimasi ± 3,5 - 4,5 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari melalui Pos 1 Cikahuripan / Citiis.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Termasuk gunung api aktif tipe A di Jawa Barat, saat ini berada pada status Level I (Normal).",
+        theme: "sapphire",
+        viaResmi: ["Via Citiis (Tarogong Kaler, Garut)"],
+        htm: "Rp 20.000 – Rp 25.000 / orang (registrasi pos pendakian & asuransi lokal).",
+        karakter: "Trek berpasir dan kerikil terbuka tanpa banyak pepohonan dari Pos 3 menuju Puncak 1–4 yang menguji ketahanan fisik, berhadiah panorama kaldera dan wilayah Garut.",
+        tips: "Gunakan gaiter atau sepatu tinggi agar kerikil tidak masuk ke sepatu, dan bawa persediaan air minum ekstra karena minim keteduhan."
+      },
+      "Gunung Papandayan": {
+        aliases: ["papandayan"],
+        wikiQuery: "Gunung Papandayan",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Garut, Jawa Barat",
+        mdpl: "2.665 MDPL",
+        level: "Pemula - Menengah • Estimasi ± 3 - 4 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari untuk wisata kawah maupun camping di Pondok Saladah / Gober Hoet.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Kawah belerang aktif dipantau PVMBG pada Level I (Normal); dilarang mendekati bibir kawah beracun.",
+        theme: "glacier",
+        viaResmi: ["Via Camp David (Cisurupan, Garut)", "Via Pangalengan"],
+        htm: "Rp 30.000 – Rp 45.000 / orang (tiket TWA Papandayan hari kerja/libur; biaya camping & parkir terpisah).",
+        karakter: "Memiliki lanskap beragam mulai dari kawah belerang aktif, kawasan Hutan Mati, hingga padang edelweiss luas di Tegal Alun.",
+        tips: "Gunakan masker saat melintasi area kawah belerang dan dilarang keras memetik bunga edelweiss di Tegal Alun."
+      },
+      "Gunung Bromo": {
+        aliases: ["bromo"],
+        wikiQuery: "Mount Bromo",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Probolinggo, Pasuruan, Lumajang & Malang, Jawa Timur",
+        mdpl: "2.329 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1 - 2 Jam",
+        statusPendakian: "Dibuka (Booking Online TNBTS)",
+        catatanPendakian: "Wajib pembelian tiket daring melalui situs resmi Taman Nasional Bromo Tengger Semeru.",
+        statusGunung: "Gunung Berapi Aktif — Level II (Waspada)",
+        catatanGunung: "Kawah aktif dalam kaldera Tengger; pengunjung wajib mematuhi radius aman dari kawah aktif.",
+        theme: "azure",
+        viaResmi: ["Via Cemoro Lawang (Probolinggo)", "Via Wonokitri (Pasuruan)", "Via Jemplang (Malang)"],
+        htm: "Rp 54.000 (hari kerja) – Rp 79.000 (hari libur) / orang WNI (booking online TNBTS).",
+        karakter: "Kaldera lautan pasir luas dengan kawah aktif yang dapat diakses melalui anak tangga serta lanskap vulkanik dengan latar Gunung Batok dan Semeru.",
+        tips: "Gunakan masker pelindung debu pasir dan jaket tebal karena suhu dini hari di kawasan Penanjakan dan Lautan Pasir sangat dingin."
+      },
+      "Gunung Merbabu": {
+        aliases: ["merbabu"],
+        wikiQuery: "Mount Merbabu",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Boyolali, Magelang & Semarang, Jawa Tengah",
+        mdpl: "3.145 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 5 - 7 Jam",
+        statusPendakian: "Dibuka (Wajib Booking Online TN Gunung Merbabu)",
+        catatanPendakian: "Wajib reservasi kuota secara daring sebelum mendaki; seluruh jalur resmi beroperasi dengan sistem kuota.",
+        statusGunung: "Stratovolcano Istirahat (Tipe B)",
+        catatanGunung: "Tidak memiliki aktivitas erupsi modern; status geologi aman bagi pendaki.",
+        theme: "azure",
+        viaResmi: ["Via Selo (Boyolali)", "Via Suwanting (Magelang)", "Via Wekas (Magelang)", "Via Thekelan (Semarang)", "Via Cunthel (Semarang)"],
+        htm: "Rp 30.000 – Rp 40.000 / orang (tiket masuk TN Gunung Merbabu + jasa basecamp lokal).",
+        karakter: "Padang sabana luas berbukit-bukit (Sabana 1 & Sabana 2) dengan pemandangan Gunung Merapi tepat di hadapan jalur menuju Puncak Kenteng Songo & Triangulasi.",
+        tips: "Sumber air di jalur Selo dan Suwanting terbatas pada pos tertentu; pastikan stok air mencukupi sejak dari basecamp."
+      },
+      "Gunung Lawu": {
+        aliases: ["lawu"],
+        wikiQuery: "Mount Lawu",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Karanganyar (Jateng) & Magetan (Jatim)",
+        mdpl: "3.265 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari dengan registrasi wajib di pos pendakian resmi.",
+        statusGunung: "Stratovolcano Istirahat (Tipe B)",
+        catatanGunung: "Terdapat aktivitas fumarol di Kawah Candradimuka (jalur pendakian utama aman).",
+        theme: "glacier",
+        viaResmi: ["Via Cemoro Sewu (Magetan)", "Via Cemoro Kandang (Karanganyar)", "Via Candi Cetho (Karanganyar)", "Via Singolangu"],
+        htm: "Rp 20.000 – Rp 30.000 / orang (tiket masuk & asuransi di pos pendakian).",
+        karakter: "Gunung kaya nilai sejarah dan budaya, hutan lumut (via Cetho), sabana Gupak Menjangan, Puncak Hargo Dumilah, serta warung tertinggi di Indonesia.",
+        tips: "Angin pegunungan Lawu sangat dingin dan kencang; bawa perlengkapan tahan angin dan siapkan kondisi fisik untuk trek panjang."
+      },
+      "Gunung Gede": {
+        aliases: ["gede", "gede pangrango", "gunung gede pangrango"],
+        wikiQuery: "Mount Gede",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Cianjur, Sukabumi & Bogor, Jawa Barat",
+        mdpl: "2.958 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 5 - 7 Jam",
+        statusPendakian: "Dibuka (Wajib Booking Online TNGGP)",
+        catatanPendakian: "Wajib pendaftaran online melalui situs resmi Taman Nasional Gunung Gede Pangrango dengan surat keterangan sehat.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Dipantau PVMBG pada Level I (Normal); pendakian dibatasi hingga Puncak Gede dan Alun-alun Suryakencana.",
+        theme: "cobalt",
+        viaResmi: ["Via Cibodas (Cianjur)", "Via Gunung Putri (Cianjur)", "Via Selabintana (Sukabumi)"],
+        htm: "Rp 34.000 (hari kerja) – Rp 39.000 (hari libur) / orang WNI (Simaksi online TNGGP).",
+        karakter: "Hutan hujan tropis montana yang lebat, air terjun Cibeureum, sumber air panas alami, kawah aktif, dan hamparan luas bunga edelweiss di Alun-alun Suryakencana.",
+        tips: "Wajib membawa surat keterangan sehat dokter dan mematuhi pemeriksaan barang bawaan oleh petugas TNGGP."
+      },
+      "Gunung Sumbing": {
+        aliases: ["sumbing"],
+        wikiQuery: "Mount Sumbing",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Wonosobo, Temanggung & Magelang, Jawa Tengah",
+        mdpl: "3.371 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari dengan registrasi wajib dan pemeriksaan logistik di basecamp resmi.",
+        statusGunung: "Stratovolcano Istirahat (Tipe B)",
+        catatanGunung: "Tidak memiliki catatan letusan modern; status geologi aman bagi pendaki.",
+        theme: "azure",
+        viaResmi: ["Via Garung (Wonosobo)", "Via Kaliangkrik / Butuh (Magelang)", "Via Bowongso (Wonosobo)", "Via Banaran (Temanggung)", "Via Cepit Parakan"],
+        htm: "Rp 25.000 – Rp 35.000 / orang (registrasi basecamp & asuransi).",
+        karakter: "Salah satu puncak tertinggi di Jawa Tengah dengan trek terjal berbatu yang menantang, kaldera kawah luas Segoro Banjaran, serta Puncak Rajawali dan Puncak Sejati.",
+        tips: "Trek Sumbing memiliki kemiringan curam terus-menerus; pastikan kondisi lutut prima, gunakan trekking pole, dan bawa persediaan air yang cukup."
+      },
+      "Gunung Sindoro": {
+        aliases: ["sindoro", "sundoro"],
+        wikiQuery: "Mount Sundoro",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Wonosobo & Temanggung, Jawa Tengah",
+        mdpl: "3.153 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 5 - 7 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari dengan registrasi di basecamp resmi dan aturan ketat bebas sampah.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Gunung api aktif tipe A yang dipantau PVMBG pada status Level I (Normal).",
+        theme: "azure",
+        viaResmi: ["Via Kledung (Temanggung)", "Via Alang-alang Sewu (Wonosobo)", "Via Bansari (Temanggung)", "Via Ndoro Arum", "Via Sigedang"],
+        htm: "Rp 25.000 – Rp 35.000 / orang (tiket simaksi & parkir basecamp).",
+        karakter: "Jalur berbatu vulkanik yang konsisten menanjak tanpa banyak jalur datar, berhadiah padang edelweiss, kawah luas dengan danau musiman, serta lautan awan.",
+        tips: "Minim sumber air di sepanjang jalur pendakian; bawa minimal 3 liter air per orang dari basecamp."
+      },
+      "Gunung Ciremai": {
+        aliases: ["ciremai", "cereme"],
+        wikiQuery: "Mount Cereme",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Kuningan & Majalengka, Jawa Barat",
+        mdpl: "3.078 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka (Booking Online TN Gunung Ciremai)",
+        catatanPendakian: "Wajib melakukan booking kuota pendakian secara online melalui situs resmi Taman Nasional Gunung Ciremai.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Gunung berapi soliter tertinggi di Jawa Barat; saat ini berstatus Level I (Normal).",
+        theme: "cobalt",
+        viaResmi: ["Via Apuy (Majalengka)", "Via Palutungan (Kuningan)", "Via Linggarjati (Kuningan)", "Via Linggasana (Kuningan)", "Via Trisakti Sadarehe"],
+        htm: "Rp 50.000 – Rp 70.000 / orang (paket tiket masuk TNGC, asuransi & jasa pemandu/basecamp).",
+        karakter: "Puncak tertinggi di Jawa Barat dengan jalur panjang melintasi hutan montana lebat, tanjakan legendaris Tanjakan Bapa Tere, serta bibir kawah ganda yang luas.",
+        tips: "Tidak ada mata air di jalur atas Pos 1; siapkan persediaan air yang cukup dan patuhi aturan kuota TNGC."
+      },
+      "Gunung Semeru": {
+        aliases: ["semeru", "mahameru"],
+        wikiQuery: "Semeru",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Lumajang & Malang, Jawa Timur",
+        mdpl: "3.676 MDPL",
+        level: "Mahir / Ekspedisi • Estimasi ± 2 - 3 Hari",
+        statusPendakian: "Dibuka Terbatas (Hanya Sampai Ranu Kumbolo / Kalimati)",
+        catatanPendakian: "Wajib booking online TNBTS; pendakian ke Puncak Mahameru dibatasi ketat sesuai rekomendasi radius bahaya PVMBG.",
+        statusGunung: "Stratovolcano Sangat Aktif — Level II / III (Waspada - Siaga)",
+        catatanGunung: "Gunung berapi paling aktif di Pulau Jawa dengan letusan berkala di Kawah Jonggring Saloko.",
+        theme: "azure",
+        viaResmi: ["Via Ranu Pani (Lumajang)"],
+        htm: "Rp 54.000 – Rp 79.000 / hari (Simaksi online TNBTS + wajib pendamping/asuransi).",
+        karakter: "Puncak tertinggi di Pulau Jawa (Mahameru) yang terkenal dengan danau Ranu Kumbolo, tanjakan cinta, padang lavender Oro-oro Ombo, dan hutan cemara Cemoro Kandang.",
+        tips: "Selalu patuhi batas aman pendakian dari petugas TNBTS dan jangan memaksakan naik ke puncak apabila status vulkanik melarang."
+      },
+      "Gunung Rinjani": {
+        aliases: ["rinjani"],
+        wikiQuery: "Mount Rinjani",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Lombok Timur, Lombok Tengah & Lombok Utara, NTB",
+        mdpl: "3.726 MDPL",
+        level: "Mahir / Ekspedisi • Estimasi ± 3 - 4 Hari",
+        statusPendakian: "Dibuka (Wajib Booking Aplikasi eRinjani)",
+        catatanPendakian: "Buka April–Desember melalui booking kuota eRinjani (biasanya tutup Jan–Mar karena cuaca ekstrem).",
+        statusGunung: "Stratovolcano Aktif — Level II (Waspada)",
+        catatanGunung: "Memiliki kaldera luas dengan Danau Segara Anak dan kerucut aktif Gunung Barujari di tengahnya.",
+        theme: "azure",
+        viaResmi: ["Via Sembalun", "Via Senaru", "Via Torean", "Via Aik Berik", "Via Timbanuh", "Via Tetebatu"],
+        htm: "Rp 20.000 – Rp 30.000 / hari (tiket masuk WNI TNGR; wajib menggunakan jasa porter/guide berlisensi sesuai regulasi).",
+        karakter: "Gunung berapi tertinggi kedua di Indonesia dengan panorama kaldera Danau Segara Anak, sumber air panas alami, serta punggungan menuju puncak.",
+        tips: "Siapkan kondisi fisik matang minimal 1 bulan sebelum pendakian dan wajib reservasi kuota via aplikasi resmi eRinjani."
+      },
+      "Gunung Kerinci": {
+        aliases: ["kerinci"],
+        wikiQuery: "Mount Kerinci",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Kerinci (Jambi) & Solok Selatan (Sumatera Barat)",
+        mdpl: "3.805 MDPL",
+        level: "Mahir / Ekspedisi • Estimasi ± 2 Hari",
+        statusPendakian: "Dibuka (Booking Online TNKS)",
+        catatanPendakian: "Buka dengan registrasi wajib di Pos R10 Kersik Tuo dan pemantauan aktivitas vulkanik PVMBG.",
+        statusGunung: "Stratovolcano Aktif — Level II (Waspada)",
+        catatanGunung: "Gunung berapi tertinggi di Indonesia dan puncak tertinggi di Pulau Sumatera; dilarang bermalam di puncak.",
+        theme: "glacier",
+        viaResmi: ["Via Kersik Tuo (Kayu Aro, Jambi)", "Via Bangun Rejo (Solok Selatan)"],
+        htm: "Rp 20.000 – Rp 30.000 / orang (tiket masuk TN Kerinci Seblat + registrasi basecamp).",
+        karakter: "Puncak tertinggi di Pulau Sumatera dengan hutan hujan tropis lebat, terowongan akar rimbun, serta kawah belerang raksasa di puncaknya.",
+        tips: "Jalur sering berlumpur dan lembap; siapkan jas hujan berkualitas, gaiter, serta perlengkapan tahan dingin."
+      },
+      "Gunung Slamet": {
+        aliases: ["slamet"],
+        wikiQuery: "Mount Slamet",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Pemalang, Banyumas, Brebes, Tegal & Purbalingga, Jateng",
+        mdpl: "3.428 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka Terbatas (Batas Aman Radius Kawah)",
+        catatanPendakian: "Buka melalui basecamp resmi dengan pembatasan radius aman dari bibir kawah sesuai rekomendasi PVMBG.",
+        statusGunung: "Stratovolcano Aktif — Level II (Waspada)",
+        catatanGunung: "Gunung tertinggi di Jawa Tengah; aktivitas kawah dipantau intensif oleh Pos Pengamatan Gunung Slamet.",
+        theme: "sapphire",
+        viaResmi: ["Via Bambangan (Purbalingga)", "Via Guci Permadi (Tegal)", "Via Dipajaya (Pemalang)", "Via Baturraden (Banyumas)", "Via Kaliwadas (Brebes)"],
+        htm: "Rp 25.000 – Rp 35.000 / orang (tiket simaksi basecamp & asuransi).",
+        karakter: "Gunung soliter raksasa yang menjadi titik tertinggi Jawa Tengah dengan sembilan pos hutan lebat sebelum memasuki zona pasir dan bebatuan vulkanik Plawangan.",
+        tips: "Selalu ikuti arahan petugas basecamp mengenai batas akhir pendakian saat status Level II (Waspada)."
+      },
+      "Gunung Merapi": {
+        aliases: ["merapi"],
+        wikiQuery: "Mount Merapi",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Sleman (DIY), Magelang, Boyolali & Klaten (Jateng)",
+        mdpl: "2.930 MDPL",
+        level: "Mahir (Saat Ini Ditutup)",
+        statusPendakian: "Ditutup Sementara (Status Siaga Vulkanik)",
+        catatanPendakian: "Seluruh jalur pendakian menuju puncak Merapi (via Selo maupun Sapuangin) ditutup total demi keselamatan akibat aktivitas erupsi efusif.",
+        statusGunung: "Stratovolcano Sangat Aktif — Level III (Siaga)",
+        catatanGunung: "Salah satu gunung api paling aktif di dunia dengan pertumbuhan kubah lava dan potensi awan panas guguran (BPPTKG).",
+        theme: "sapphire",
+        viaResmi: ["Via Selo (Boyolali - Status Tutup)", "Via Sapuangin (Klaten - Status Tutup)"],
+        htm: "Pendakian ditutup (wisata alternatif aman: Bunker Kaliadem, Museum Gunung Merapi, Bukit Klangon).",
+        karakter: "Gunung berapi ikonik di perbatasan Yogyakarta dan Jawa Tengah yang memiliki sejarah vulkanik panjang serta keindahan lanskap lereng yang subur.",
+        tips: "Patuhi larangan mendaki dari TNGM dan BPPTKG; nikmati lanskap Merapi dari titik wisata aman di luar radius bahaya."
+      },
+      "Gunung Arjuno": {
+        aliases: ["arjuno", "arjuna", "arjuno welirang"],
+        wikiQuery: "Arjuno-Welirang",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Pasuruan, Malang & Kota Batu, Jawa Timur",
+        mdpl: "3.339 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 7 - 9 Jam",
+        statusPendakian: "Dibuka (Booking Online Tahura Raden Soerjo)",
+        catatanPendakian: "Wajib pendaftaran online melalui situs resmi UPT Tahura Raden Soerjo.",
+        statusGunung: "Stratovolcano Kembar (Arjuno-Welirang) — Level I (Normal)",
+        catatanGunung: "Kompleks vulkanik kembar dengan aktivitas solfatara aktif di kawah Gunung Welirang.",
+        theme: "cobalt",
+        viaResmi: ["Via Tretes (Pasuruan)", "Via Lawang (Malang)", "Via Purwosari (Pasuruan)", "Via Sumberbrantas (Batu)"],
+        htm: "Rp 20.000 – Rp 30.000 / orang WNI (booking online Tahura Raden Soerjo).",
+        karakter: "Gunung tertinggi kedua di Jawa Timur dengan hamparan sabana Lali Jiwo, hutan cemara megah, serta jalur lintas puncak menuju Gunung Welirang.",
+        tips: "Siapkan navigasi yang baik terutama di area sabana Lali Jiwo saat berkabut tebal."
+      },
+      "Gunung Welirang": {
+        aliases: ["welirang"],
+        wikiQuery: "Mount Welirang",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Mojokerto, Pasuruan & Kota Batu, Jawa Timur",
+        mdpl: "3.156 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka (Booking Online Tahura Raden Soerjo)",
+        catatanPendakian: "Wajib reservasi daring melalui Tahura Raden Soerjo sebelum keberangkatan.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Memiliki kawah belerang aktif yang masih ditambang secara tradisional oleh penambang lokal.",
+        theme: "glacier",
+        viaResmi: ["Via Tretes (Prigen, Pasuruan)", "Via Sumberbrantas (Cangar, Batu)"],
+        htm: "Rp 20.000 – Rp 30.000 / orang WNI (Simaksi Tahura Raden Soerjo).",
+        karakter: "Berdiri berdampingan dengan Gunung Arjuno, terkenal dengan kepulan asap belerang kuning dari kawahnya serta jalur berbatu khas penambang belerang.",
+        tips: "Bawa masker pelindung gas belerang saat mendekati area kawah puncak."
+      },
+      "Gunung Ijen": {
+        aliases: ["ijen", "kawah ijen"],
+        wikiQuery: "Kawah Ijen",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Banyuwangi & Bondowoso, Jawa Timur",
+        mdpl: "2.386 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1,5 - 2 Jam",
+        statusPendakian: "Dibuka (Booking Online BKSDA Jatim)",
+        catatanPendakian: "Wajib pembelian tiket online melalui sistem BKSDA Jawa Timur dengan surat sehat.",
+        statusGunung: "Stratovolcano Aktif — Level I / II (Normal - Waspada)",
+        catatanGunung: "Memiliki danau kawah asam terbesar di dunia dan fenomena api biru (blue fire); dilarang turun ke dasar kawah saat gas beracun meningkat.",
+        theme: "glacier",
+        viaResmi: ["Via Paltuding (Banyuwangi / Bondowoso)"],
+        htm: "Rp 20.000 – Rp 30.000 / orang WNI (booking online BKSDA).",
+        karakter: "Dikenal secara internasional berkat fenomena api biru (blue fire) pada dini hari serta danau kawah berwarna hijau toska.",
+        tips: "Wajib membawa respirator/masker gas khusus belerang dan lampu kepala karena pendakian dimulai dini hari."
+      },
+      "Gunung Raung": {
+        aliases: ["raung"],
+        wikiQuery: "Mount Raung",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Banyuwangi, Bondowoso & Jember, Jawa Timur",
+        mdpl: "3.344 MDPL",
+        level: "Ekstrem / Teknis • Estimasi ± 2 - 3 Hari",
+        statusPendakian: "Dibuka Terbatas (Wajib Pemandu / Peralatan Teknis)",
+        catatanPendakian: "Pendakian menuju Puncak Sejati memerlukan peralatan panjat tebing (harness, carabiner, tali) dan pemandu bersertifikat.",
+        statusGunung: "Stratovolcano Aktif — Level II (Waspada)",
+        catatanGunung: "Memiliki kaldera kering sangat luas dengan kerucut aktif di dasar kaldera yang kerap mengeluarkan abu vulkanik.",
+        theme: "sapphire",
+        viaResmi: ["Via Kalibaru (Banyuwangi)", "Via Sumberwringin (Bondowoso - sampai Puncak Bendera)"],
+        htm: "Rp 25.000 – Rp 50.000 / orang (registrasi basecamp; paket pemandu & alat teknis terpisah).",
+        karakter: "Dikenal memiliki jalur puncak paling teknis di Pulau Jawa karena harus melintasi punggungan sempit di tepi jurang kaldera.",
+        tips: "Tidak disarankan untuk pemula; pastikan didampingi tim pemandu berpengalaman dalam pengamanan tali."
+      },
+      "Gunung Argopuro": {
+        aliases: ["argopuro"],
+        wikiQuery: "Iyang-Argapura",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Probolinggo, Situbondo, Bondowoso & Jember, Jawa Timur",
+        mdpl: "3.088 MDPL",
+        level: "Ekspedisi Jarak Jauh • Estimasi ± 4 - 5 Hari",
+        statusPendakian: "Dibuka (Booking Online BKSDA Jatim)",
+        catatanPendakian: "Wajib booking online BKSDA dan melaporkan rencana perjalanan lintas jalur.",
+        statusGunung: "Kompleks Vulkanik Tidak Aktif",
+        catatanGunung: "Memiliki jalur pendakian terpanjang di Pulau Jawa (± 40–60 km lintas Bremi–Baderan).",
+        theme: "cobalt",
+        viaResmi: ["Via Bremi (Probolinggo)", "Via Baderan (Situbondo)"],
+        htm: "Rp 20.000 – Rp 30.000 / hari WNI (tiket Suaka Margasatwa Dataran Tinggi Yang).",
+        karakter: "Jalur ekspedisi alam liar dengan padang sabana Cikasur yang luas, Danau Taman Hidup yang berkabut, serta Puncak Rengganis yang bersejarah.",
+        tips: "Persiapkan manajemen logistik untuk 4–5 hari perjalanan dan pelajari peta titik sumber air di tiap pos."
+      },
+      "Gunung Agung": {
+        aliases: ["agung"],
+        wikiQuery: "Mount Agung",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Karangasem, Bali",
+        mdpl: "3.142 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka (Wajib Pemandu Lokal)",
+        catatanPendakian: "Pendakian dibuka dengan aturan wajib menggunakan pemandu lokal demi keselamatan dan penghormatan adat Bali.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Gunung tertinggi dan paling disucikan di Pulau Bali; dipantau PVMBG pada status Level I (Normal).",
+        theme: "azure",
+        viaResmi: ["Via Besakih (Rendang)", "Via Pasar Agung (Selat)", "Via Edelweiss (Batusesa)"],
+        htm: "Rp 50.000 – Rp 100.000 / orang (kontribusi desa adat/banjar; belum termasuk jasa pemandu lokal).",
+        karakter: "Titik tertinggi Pulau Bali dengan jalur terjal berbatu vulkanik yang menawarkan pemandangan seluruh Pulau Bali hingga Gunung Rinjani di Lombok saat cuaca cerah.",
+        tips: "Hormati aturan adat setempat serta larangan mendaki saat berlangsung upacara keagamaan besar."
+      },
+      "Gunung Batur": {
+        aliases: ["batur"],
+        wikiQuery: "Mount Batur",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Kintamani, Bangli, Bali",
+        mdpl: "1.717 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1,5 - 2 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari untuk pendakian matahari terbit melalui pos registrasi Kintamani.",
+        statusGunung: "Kaldera Vulkanik Aktif — Level I (Normal)",
+        catatanGunung: "Bagian dari UNESCO Global Geopark Batur dengan danau kaldera dan kerucut aktif di tengahnya.",
+        theme: "azure",
+        viaResmi: ["Via Toya Bungkah", "Via Pura Jati", "Via Serongga"],
+        htm: "Rp 50.000 – Rp 100.000 / orang WNI (tiket kawasan geopark & registrasi pos).",
+        karakter: "Destinasi pendakian pagi populer di Bali dengan panorama Danau Batur, kaldera purba, dan siluet Gunung Agung serta Rinjani di kejauhan.",
+        tips: "Gunakan sepatu trekking karena jalur berupa pasir hitam dan bebatuan lava."
+      },
+      "Gunung Tambora": {
+        aliases: ["tambora"],
+        wikiQuery: "Mount Tambora",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Dompu & Bima, Pulau Sumbawa, NTB",
+        mdpl: "2.851 MDPL",
+        level: "Ekspedisi • Estimasi ± 2 - 3 Hari",
+        statusPendakian: "Dibuka (Registrasi TN Tambora)",
+        catatanPendakian: "Buka dengan registrasi wajib di pintu masuk Taman Nasional Tambora.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Terkenal dengan letusan besar tahun 1815 yang membentuk kaldera raksasa berdiameter ± 7 km.",
+        theme: "sapphire",
+        viaResmi: ["Via Pancasila (Dompu)", "Via Doro Ncanga (Jalur Sabana / Jip)"],
+        htm: "Rp 20.000 – Rp 30.000 / hari WNI (tiket TN Tambora).",
+        karakter: "Menawarkan pengalaman berdiri di tepi salah satu kaldera gunung berapi terbesar di dunia setelah melintasi hutan tropis rimbun atau sabana luas.",
+        tips: "Gunakan jasa pemandu lokal karena jalur hutan di Via Pancasila cukup lebat dan panjang."
+      },
+      "Gunung Latimojong": {
+        aliases: ["latimojong", "rantemario"],
+        wikiQuery: "Mount Latimojong",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Enrekang, Sulawesi Selatan",
+        mdpl: "3.478 MDPL",
+        level: "Ekspedisi • Estimasi ± 2 - 3 Hari",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka dengan registrasi wajib di Desa Karangan dan laporan ke pihak berwenang setempat.",
+        statusGunung: "Pegunungan Non-Vulkanik (Tektogenetik)",
+        catatanGunung: "Salah satu dari Seven Summits of Indonesia; bukan gunung berapi sehingga tidak memiliki kawah vulkanik.",
+        theme: "cobalt",
+        viaResmi: ["Via Desa Karangan (Baraka, Enrekang)"],
+        htm: "Rp 25.000 – Rp 50.000 / orang (registrasi pos & kontribusi desa).",
+        karakter: "Puncak tertinggi di Pulau Sulawesi (Puncak Rante Mario) dengan hutan lumut yang lebat, aliran sungai jernih, serta tantangan medan akar pohon yang rapat.",
+        tips: "Bawa perlengkapan tahan hujan dan dingin karena kelembapan hutan di Sulawesi cukup tinggi."
+      },
+      "Gunung Binaiya": {
+        aliases: ["binaiya"],
+        wikiQuery: "Mount Binaiya",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Pulau Seram, Maluku Tengah, Maluku",
+        mdpl: "3.027 MDPL",
+        level: "Ekspedisi Berat • Estimasi ± 5 - 7 Hari",
+        statusPendakian: "Dibuka (Wajib Izin Adat & TN Manusela)",
+        catatanPendakian: "Wajib mengurus SIMAKSI Taman Nasional Manusela dan mengikuti prosesi izin adat di desa pintu masuk.",
+        statusGunung: "Gunung Non-Vulkanik (Karst & Pegunungan Lipatan)",
+        catatanGunung: "Bagian dari Seven Summits of Indonesia; puncak tertinggi di Kepulauan Maluku.",
+        theme: "cobalt",
+        viaResmi: ["Via Piliana (Selatan)", "Via Huaulu (Utara)"],
+        htm: "Rp 20.000 – Rp 30.000 / hari WNI (Simaksi TN Manusela; biaya upacara adat & pemandu wajib diatur terpisah).",
+        karakter: "Ekspedisi melintasi hutan hujan tropis Pulau Seram, menyeberangi sungai deras, hutan lumut, hingga puncak berbatu karst di atas awan.",
+        tips: "Wajib menggunakan pemandu lokal masyarakat adat dan menyiapkan kondisi fisik ekstra."
+      },
+      "Gunung Bukit Raya": {
+        aliases: ["bukit raya"],
+        wikiQuery: "Bukit Raya",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Katingan (Kalimantan Tengah) & Sintang (Kalimantan Barat)",
+        mdpl: "2.278 MDPL",
+        level: "Ekspedisi Berat • Estimasi ± 5 - 7 Hari",
+        statusPendakian: "Dibuka (Wajib Simaksi TN Bukit Baka Bukit Raya)",
+        catatanPendakian: "Wajib mengurus izin masuk di kantor TNBBBR dan didampingi pemandu lokal.",
+        statusGunung: "Gunung Non-Vulkanik (Pegunungan Schwaner)",
+        catatanGunung: "Puncak tertinggi di wilayah Kalimantan Indonesia (Seven Summits of Indonesia).",
+        theme: "cobalt",
+        viaResmi: ["Via Desa Rantau Malam (Serawai, Kalbar)", "Via Tumbang Habangoi (Kalteng)"],
+        htm: "Rp 20.000 – Rp 30.000 / hari WNI (Simaksi TNBBBR; biaya transportasi sungai & pemandu lokal terpisah).",
+        karakter: "Perjalanan di jantung hutan hujan Kalimantan dengan akses perahu menyusuri sungai beriam, keanekaragaman hayati tinggi, dan hutan lumut pekat.",
+        tips: "Siapkan pelindung pacet/lintah, kantong anti-air (dry bag), dan pemandu lokal berpengalaman."
+      },
+      "Gunung Sibayak": {
+        aliases: ["sibayak"],
+        wikiQuery: "Mount Sibayak",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Karo (Berastagi), Sumatera Utara",
+        mdpl: "2.212 MDPL",
+        level: "Ramah Pemula • Estimasi ± 2 - 2,5 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari untuk pendakian matahari terbit maupun wisata kawah.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Memiliki kawah solfatara aktif dengan semburan uap panas bumi; status Level I (Normal).",
+        theme: "glacier",
+        viaResmi: ["Via Raja Berneh (Semangat Gunung)", "Via Jaranguda (Berastagi)"],
+        htm: "Rp 15.000 – Rp 25.000 / orang (retribusi pos pendakian).",
+        karakter: "Gunung populer di Sumatera Utara dengan akses relatif mudah, kawah belerang aktif yang unik, serta pemandangan puncak Gunung Sinabung di dekatnya.",
+        tips: "Berhati-hati di sekitar rekahan kawah belerang panas dan bawa jaket hangat."
+      },
+      "Gunung Sinabung": {
+        aliases: ["sinabung"],
+        wikiQuery: "Mount Sinabung",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Karo, Sumatera Utara",
+        mdpl: "2.460 MDPL",
+        level: "Ditutup / Berbahaya",
+        statusPendakian: "Ditutup Total (Zona Bahaya Vulkanik)",
+        catatanPendakian: "Seluruh jalur pendakian ditutup total oleh pemerintah & PVMBG karena ancaman awan panas guguran dan erupsi.",
+        statusGunung: "Stratovolcano Sangat Aktif — Level II / III (Waspada - Siaga)",
+        catatanGunung: "Aktif kembali sejak 2010 dengan kubah lava tidak stabil di puncak.",
+        theme: "sapphire",
+        viaResmi: ["Tidak Ada (Seluruh Jalur Pendakian Ditutup)"],
+        htm: "Ditutup untuk aktivitas pendakian.",
+        karakter: "Gunung berapi ikonik di Tanah Karo dengan puncak berbatu terjal yang sejak 2010 menjadi salah satu gunung paling aktif di Sumatera.",
+        tips: "Patuhi zona larangan masuk yang ditetapkan PVMBG dan BPBD Kabupaten Karo."
+      },
+      "Gunung Marapi": {
+        aliases: ["marapi"],
+        wikiQuery: "Mount Marapi",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Agam & Tanah Datar, Sumatera Barat",
+        mdpl: "2.891 MDPL",
+        level: "Ditutup Sementara (Status Waspada/Siaga)",
+        catatanPendakian: "Jalur pendakian ditutup sementara oleh BKSDA Sumatera Barat menyusul aktivitas erupsi eksplosif.",
+        statusGunung: "Gunung Berapi Kompleks Sangat Aktif — Level II / III",
+        catatanGunung: "Gunung api paling aktif di Pulau Sumatera; karakter letusan freatik/eksplosif dapat terjadi tiba-tiba.",
+        theme: "sapphire",
+        viaResmi: ["Via Koto Baru (Tanah Datar - Status Tutup)", "Via Batu Palano (Agam - Status Tutup)"],
+        htm: "Pendakian ditutup sementara sesuai kebijakan BKSDA Sumbar.",
+        karakter: "Gunung legendaris di Sumatera Barat dengan Puncak Merpati dan kawasan cadas Taman Edelweiss.",
+        tips: "Selalu periksa pengumuman resmi BKSDA Sumatera Barat dan PVMBG sebelum merencanakan pendakian ke wilayah ini."
+      },
+      "Gunung Singgalang": {
+        aliases: ["singgalang"],
+        wikiQuery: "Mount Singgalang",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Agam & Tanah Datar, Sumatera Barat",
+        mdpl: "2.877 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 4 - 6 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka dengan registrasi wajib di pos pendakian resmi.",
+        statusGunung: "Stratovolcano Tidak Aktif",
+        catatanGunung: "Tidak memiliki aktivitas erupsi dalam sejarah modern; puncak kawahnya membentuk danau alami (Telaga Dewi).",
+        theme: "cobalt",
+        viaResmi: ["Via Pandai Sikek (Tanah Datar)", "Via Balingka (Agam)"],
+        htm: "Rp 20.000 – Rp 25.000 / orang (registrasi pos pendakian).",
+        karakter: "Dikenal dengan Telaga Dewi—danau kawah tenang yang dikelilingi hutan lumut di ketinggian 2.700-an mdpl.",
+        tips: "Jalur hutan lumut cenderung basah dan licin; gunakan sepatu trekking dengan sol anti-slip."
+      },
+      "Gunung Cikuray": {
+        aliases: ["cikuray"],
+        wikiQuery: "Mount Cikuray",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Garut, Jawa Barat",
+        mdpl: "2.821 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 5 - 6 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari dengan registrasi di pos basecamp resmi.",
+        statusGunung: "Stratovolcano Tidak Aktif",
+        catatanGunung: "Tidak pernah tercatat meletus; merupakan gunung tertinggi keempat di Jawa Barat.",
+        theme: "glacier",
+        viaResmi: ["Via Pemancar (Cilawu)", "Via Kiara Janggot", "Via Tapak Geurot", "Via Bayongbong"],
+        htm: "Rp 20.000 – Rp 30.000 / orang (tiket simaksi basecamp).",
+        karakter: "Memiliki jalur tanjakan curam tanpa banyak jalur datar dengan panorama lautan awan serta Gunung Papandayan dan Guntur.",
+        tips: "Bawa air minum yang cukup karena sumber air di jalur sangat terbatas."
+      },
+      "Gunung Pangrango": {
+        aliases: ["pangrango", "mandalawangi"],
+        wikiQuery: "Mount Pangrango",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Bogor, Cianjur & Sukabumi, Jawa Barat",
+        mdpl: "3.019 MDPL",
+        level: "Mahir / Menantang • Estimasi ± 6 - 8 Jam",
+        statusPendakian: "Dibuka (Wajib Booking Online TNGGP)",
+        catatanPendakian: "Satu kawasan dengan Gunung Gede; wajib reservasi online melalui situs resmi TNGGP.",
+        statusGunung: "Stratovolcano Istirahat (Tipe B)",
+        catatanGunung: "Berdiri berdampingan dengan Gunung Gede; memiliki lembah sunyi Mandalawangi.",
+        theme: "cobalt",
+        viaResmi: ["Via Cibodas (Cianjur - melalui Simpang Kandang Badak)"],
+        htm: "Rp 34.000 – Rp 39.000 / orang WNI (booking online TNGGP + surat sehat).",
+        karakter: "Menawarkan ketenangan hutan montana rimbun, Puncak Mandalawangi, serta lembah edelweiss Mandalawangi.",
+        tips: "Jalur dari Kandang Badak menuju puncak Pangrango sangat curam dan rapat; persiapkan stamina prima."
+      },
+      "Gunung Salak": {
+        aliases: ["salak"],
+        wikiQuery: "Mount Salak",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Bogor & Sukabumi, Jawa Barat",
+        mdpl: "2.211 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 4 - 6 Jam",
+        statusPendakian: "Dibuka (Booking Online TNGHS)",
+        catatanPendakian: "Wajib pendaftaran online melalui Taman Nasional Gunung Halimun Salak dengan kuota harian.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Memiliki kawah aktif (Kawah Ratu) dengan gas belerang; status dipantau PVMBG Level I (Normal).",
+        theme: "cobalt",
+        viaResmi: ["Via Cidahu (Sukabumi)", "Via Pasir Reungit (Bogor)", "Via Ajisaka"],
+        htm: "Rp 25.000 – Rp 35.000 / orang (booking online TNGHS).",
+        karakter: "Hutan hujan tropis lebat dengan kelembapan tinggi, akar-akar pohon raksasa, serta fenomena Kawah Ratu.",
+        tips: "Cuaca di Gunung Salak cepat berubah menjadi kabut atau hujan; wajib membawa jas hujan dan alat navigasi."
+      },
+      "Gunung Galunggung": {
+        aliases: ["galunggung"],
+        wikiQuery: "Galunggung",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Tasikmalaya, Jawa Barat",
+        mdpl: "2.167 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1 - 2 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari untuk wisata tangga kawah maupun pendakian puncak.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Memiliki danau kawah hijau luas pasca-letusan 1982; dipantau PVMBG pada Level I (Normal).",
+        theme: "glacier",
+        viaResmi: ["Via Tangga Kuning / Biru (Linggajati, Sukaratu)"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (tiket masuk kawasan wisata kawah).",
+        karakter: "Dapat dicapai melalui ratusan anak tangga menuju bibir kawah hijau yang luas, dikelilingi tebing kaldera curam.",
+        tips: "Jaga barang bawaan dari satwa liar di sekitar area tangga dan patuhi pagar pembatas bibir kawah."
+      },
+      "Gunung Muria": {
+        aliases: ["muria", "puncak songolikur", "puncak natas angin"],
+        wikiQuery: "Mount Muria",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Kudus, Jepara & Pati, Jawa Tengah",
+        mdpl: "1.602 MDPL",
+        level: "Pemula - Menengah • Estimasi ± 3 - 4 Jam",
+        statusPendakian: "Dibuka untuk Umum",
+        catatanPendakian: "Buka setiap hari melalui pos pendakian resmi di Kudus dan Jepara.",
+        statusGunung: "Stratovolcano Tidak Aktif",
+        catatanGunung: "Gunung api tua di pesisir utara Jawa dengan status geologi aman.",
+        theme: "cobalt",
+        viaResmi: ["Via Rahtawu (Kudus)", "Via Tempur (Jepara)"],
+        htm: "Rp 15.000 – Rp 20.000 / orang (registrasi pos & parkir).",
+        karakter: "Memiliki beberapa puncak seperti Puncak Songolikur dan Puncak Natas Angin dengan jalur punggungan dan suasana religi yang kental.",
+        tips: "Berhati-hati saat melintasi jalur punggungan menuju Puncak Natas Angin karena sisi kanan-kirinya jurang curam."
+      },
+      "Gunung Kelud": {
+        aliases: ["kelud"],
+        wikiQuery: "Kelud",
+        inIndonesia: true,
+        negara: "Indonesia",
+        lokasi: "Kediri, Blitar & Malang, Jawa Timur",
+        mdpl: "1.731 MDPL",
+        level: "Ramah Pemula • Estimasi ± 1,5 - 3 Jam",
+        statusPendakian: "Dibuka (Wisata Kawah Kediri & Jalur Tulungrejo)",
+        catatanPendakian: "Wisata kawah via Kediri buka setiap hari; jalur pendakian puncak via Tulungrejo Blitar dibuka dengan registrasi pos.",
+        statusGunung: "Stratovolcano Aktif — Level I (Normal)",
+        catatanGunung: "Memiliki danau kawah aktif pasca-erupsi 2014; saat ini berada pada status Level I (Normal).",
+        theme: "azure",
+        viaResmi: ["Via Ngancar (Kediri - Wisata Kawah)", "Via Tulungrejo (Gandusari, Blitar - Jalur Pendakian)"],
+        htm: "Rp 15.000 – Rp 25.000 / orang (tiket masuk wisata/pos pendakian).",
+        karakter: "Menyajikan pemandangan danau kawah hijau toska yang dikelilingi puncak-puncak tebing andesit tajam seperti Puncak Sumbing dan Puncak Gajah Mungkur.",
+        tips: "Via Tulungrejo Blitar lebih menantang untuk pendaki yang ingin merasakan trek hutan dan puncak."
+      },
+
+      // --- GUNUNG LUAR NEGERI ---
+      "Gunung Fuji": {
+        aliases: ["fuji", "mount fuji", "fujisan"],
+        wikiQuery: "Mount Fuji",
+        inIndonesia: false,
+        negara: "Jepang",
+        lokasi: "Prefektur Shizuoka & Yamanashi, Jepang",
+        mdpl: "3.776 MDPL",
+        level: "Menengah - Mahir • Estimasi ± 5 - 8 Jam",
+        statusPendakian: "Musiman (Buka Resmi Juli – Awal September)",
+        catatanPendakian: "Hanya dibuka resmi pada musim panas (1 Juli – 10 September) dengan sistem reservasi & kuota harian; ditutup di luar musim karena salju ekstrem.",
+        statusGunung: "Stratovolcano Aktif (Tidur / Dormant)",
+        catatanGunung: "Gunung tertinggi di Jepang dan Situs Warisan Dunia UNESCO; terakhir meletus tahun 1707.",
+        theme: "azure",
+        viaResmi: ["Jalur Yoshida (Yamanashi)", "Jalur Subashiri (Shizuoka)", "Jalur Gotemba (Shizuoka)", "Jalur Fujinomiya (Shizuoka)"],
+        htm: "¥ 2.000 – ¥ 4.000 (± Rp 210.000 – Rp 420.000) biaya masuk resmi pendakian + biaya pondok gunung.",
+        karakter: "Simbol negara Jepang dengan bentuk kerucut simetris berselimut salju abadi di musim dingin dan panorama matahari terbit (Goraiko).",
+        tips: "Wajib melakukan aklimatisasi di 5th Station (2.300 mdpl) sebelum mendaki ke puncak untuk mencegah penyakit ketinggian (AMS)."
+      },
+      "Gunung Kinabalu": {
+        aliases: ["kinabalu", "mount kinabalu"],
+        wikiQuery: "Mount Kinabalu",
+        inIndonesia: false,
+        negara: "Malaysia",
+        lokasi: "Taman Kinabalu, Sabah, Malaysia",
+        mdpl: "4.095 MDPL",
+        level: "Mahir • Estimasi ± 2 Hari 1 Malam",
+        statusPendakian: "Dibuka (Wajib Booking Permit & Guide Sabah Parks)",
+        catatanPendakian: "Kuota harian dibatasi ketat oleh Sabah Parks; wajib menginap di Panalaban dan didampingi pemandu resmi.",
+        statusGunung: "Gunung Granit Non-Vulkanik (Pluton)",
+        catatanGunung: "Puncak tertinggi di Pulau Kalimantan (Borneo) dan salah satu gunung tertinggi di Asia Tenggara.",
+        theme: "azure",
+        viaResmi: ["Via Timpohon Gate (Taman Kinabalu, Ranau)"],
+        htm: "Paket resmi izin, asuransi, pemandu & penginapan Panalaban mulai ± RM 800 – RM 1.500 (tarif khusus pemegang paspor ASEAN).",
+        karakter: "Terkenal dengan hamparan batuan granit raksasa di Puncak Low's Peak serta kekayaan flora endemik seperti kantong semar raksasa.",
+        tips: "Lakukan pemesanan slot permit jauh hari (3–6 bulan sebelumnya) karena kuota harian sangat terbatas."
+      },
+      "Gunung Everest": {
+        aliases: ["everest", "mount everest", "sagarmatha", "chomolungma"],
+        wikiQuery: "Mount Everest",
+        inIndonesia: false,
+        negara: "Nepal & Tiongkok (Tibet)",
+        lokasi: "Pegunungan Himalaya (Solukhumbu, Nepal / Tibet)",
+        mdpl: "8.848,86 MDPL",
+        level: "Ekspedisi Ekstrem (Alpinisme)",
+        statusPendakian: "Musiman (Musim Semi April–Mei & Musim Gugur)",
+        catatanPendakian: "Memerlukan izin ekspedisi khusus dari Pemerintah Nepal/Tiongkok, sertifikasi pengalaman ketinggian, serta tim Sherpa.",
+        statusGunung: "Pegunungan Lipatan Tektonik (Non-Vulkanik)",
+        catatanGunung: "Titik tertinggi di permukaan Bumi di atas permukaan laut.",
+        theme: "glacier",
+        viaResmi: ["South Col Route (Nepal - via Lukla & Everest Base Camp)", "North Ridge Route (Tibet)"],
+        htm: "Izin pendakian puncak USD 11.000 – USD 15.000 / pendaki (belum termasuk logistik ekspedisi); trekking ke Everest Base Camp jauh lebih terjangkau.",
+        karakter: "Puncak tertinggi di dunia dengan zona ketinggian ekstrem di atas 8.000 mdpl, gletser Khumbu, dan panorama pegunungan Himalaya.",
+        tips: "Bagi pendaki rekreasional, rute trekking menuju Everest Base Camp (5.364 mdpl) merupakan alternatif tanpa perlu keahlian panjat es ekstrem."
+      },
+      "Gunung Kilimanjaro": {
+        aliases: ["kilimanjaro", "mount kilimanjaro", "uhuru peak"],
+        wikiQuery: "Mount Kilimanjaro",
+        inIndonesia: false,
+        negara: "Tanzania",
+        lokasi: "Taman Nasional Kilimanjaro, Tanzania, Afrika Timur",
+        mdpl: "5.895 MDPL",
+        level: "Ekspedisi Ketinggian Tinggi • Estimasi ± 5 - 8 Hari",
+        statusPendakian: "Dibuka Sepanjang Tahun (Wajib Guide Resmi KINAPA)",
+        catatanPendakian: "Wajib menggunakan operator & pemandu berlisensi Taman Nasional Kilimanjaro (KINAPA).",
+        statusGunung: "Stratovolcano Tidak Aktif (Dormant)",
+        catatanGunung: "Gunung berdiri bebas (free-standing) tertinggi di dunia dan puncak tertinggi di Benua Afrika.",
+        theme: "azure",
+        viaResmi: ["Rute Marangu", "Rute Machame", "Rute Lemosho", "Rute Rongai"],
+        htm: "Biaya taman nasional & paket ekspedisi 6–7 hari berkisar USD 1.500 – USD 2.800 / orang.",
+        karakter: "Melintasi lima zona iklim berbeda mulai dari hutan hujan tropis, padang moorland, gurun alpen, hingga gletser salju di Puncak Uhuru.",
+        tips: "Pilih rute 7–8 hari seperti Lemosho atau Machame agar tubuh memiliki waktu aklimatisasi yang optimal."
+      }
+    };
+
+    // =========================================================================
+    // 2. LABEL & LOGIKA PEMETAAN 72 KOMBINASI (INTERNAL ENGINE)
+    // =========================================================================
+    const LABELS = {
+      jk: { "1": "Laki-laki", "2": "Perempuan" },
+      usia: { "1": "Di bawah 20 tahun", "2": "20 tahun ke atas" },
+      pengalaman: { "1": "Baru pertama kali", "2": "Sudah pernah", "3": "Sering" },
+      ketinggian: { "1": "Belum pernah", "2": "Di bawah 2.500 mdpl", "3": "Di atas 2.500 mdpl" },
+      jenis: { "1": "Tektok", "2": "Camping" }
+    };
+
+    const VALID_RECOMMENDATIONS_MAP = {
+      "1111": ["Gunung Andong", "Gunung Nglanggeran", "Gunung Telomoyo", "Gunung Ungaran", "Gunung Panderman"],
+      "1112": ["Gunung Prau", "Gunung Andong", "Gunung Bismo", "Gunung Ungaran", "Gunung Pakuwaja"],
+      "2111": ["Gunung Nglanggeran", "Gunung Telomoyo", "Gunung Kembang", "Gunung Panderman", "Gunung Mongkrang"],
+      "2112": ["Gunung Andong", "Gunung Bismo", "Gunung Pakuwaja", "Gunung Prau", "Gunung Ungaran"],
+      "1221": ["Gunung Ungaran", "Gunung Penanggungan", "Gunung Kembang", "Gunung Bismo", "Gunung Guntur"],
+      "1222": ["Gunung Ungaran", "Gunung Penanggungan", "Gunung Kembang", "Gunung Bismo", "Gunung Papandayan"],
+      "2221": ["Gunung Ungaran", "Gunung Penanggungan", "Gunung Kembang", "Gunung Guntur", "Gunung Bismo"],
+      "2222": ["Gunung Ungaran", "Gunung Penanggungan", "Gunung Kembang", "Gunung Bismo", "Gunung Papandayan"],
+      "1231": ["Gunung Prau", "Gunung Papandayan", "Gunung Guntur", "Gunung Bromo", "Gunung Merbabu"],
+      "1232": ["Gunung Prau", "Gunung Papandayan", "Gunung Merbabu", "Gunung Lawu", "Gunung Gede"],
+      "2231": ["Gunung Prau", "Gunung Papandayan", "Gunung Guntur", "Gunung Merbabu", "Gunung Lawu"],
+      "2232": ["Gunung Papandayan", "Gunung Merbabu", "Gunung Lawu", "Gunung Gede", "Gunung Sumbing"],
+      "1321": ["Gunung Guntur", "Gunung Kembang", "Gunung Bismo", "Gunung Prau", "Gunung Papandayan"],
+      "1322": ["Gunung Bismo", "Gunung Papandayan", "Gunung Prau", "Gunung Merbabu", "Gunung Lawu"],
+      "2321": ["Gunung Guntur", "Gunung Kembang", "Gunung Bismo", "Gunung Sindoro", "Gunung Sumbing"],
+      "2322": ["Gunung Papandayan", "Gunung Prau", "Gunung Merbabu", "Gunung Lawu", "Gunung Sumbing"],
+      "1331": ["Gunung Merbabu", "Gunung Lawu", "Gunung Sindoro", "Gunung Sumbing", "Gunung Ciremai"],
+      "1332": ["Gunung Merbabu", "Gunung Lawu", "Gunung Sindoro", "Gunung Sumbing", "Gunung Ciremai"],
+      "2331": ["Gunung Merbabu", "Gunung Lawu", "Gunung Sindoro", "Gunung Sumbing", "Gunung Ciremai"],
+      "2332": ["Gunung Merbabu", "Gunung Lawu", "Gunung Sindoro", "Gunung Sumbing", "Gunung Ciremai"]
+    };
+
+    const appState = {
+      userName: "",
+      memorableMountain: "",
+      jk: "",
+      usia: "",
+      pengalaman: "",
+      ketinggian: "",
+      jenis: "",
+      detailReturnPage: 3
+    };
+
+    // =========================================================================
+    // 2B. RESOLVER DATABASE GUNUNG & ARTWORK SVG BIRU-PUTIH MEWAH
+    // =========================================================================
+    function normalizeMountainQuery(rawText) {
+      return (rawText || "")
+        .toLowerCase()
+        .replace(/^(gunung|gn\.?|mount|mt\.?|bukit)\s+/i, "")
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function resolveMountainRecord(rawInput) {
+      const cleanedInput = (rawInput || "").trim();
+      const normQuery = normalizeMountainQuery(cleanedInput);
+
+      if (!normQuery) return null;
+
+      for (const [officialName, data] of Object.entries(MOUNTAIN_DATA)) {
+        const normOfficial = normalizeMountainQuery(officialName);
+        const aliases = (data.aliases || []).map(a => normalizeMountainQuery(a));
+
+        if (
+          normQuery === normOfficial ||
+          aliases.includes(normQuery) ||
+          (normQuery.length >= 4 && (normOfficial.includes(normQuery) || normQuery.includes(normOfficial)))
+        ) {
+          return {
+            foundInDb: true,
+            title: officialName,
+            ...data
+          };
+        }
+      }
+
+      const displayTitle = /^gunung\s+/i.test(cleanedInput) || /^mount\s+/i.test(cleanedInput)
+        ? cleanedInput
+        : `Gunung ${cleanedInput}`;
+
+      return {
+        foundInDb: false,
+        title: displayTitle,
+        inIndonesia: null,
+        negara: "Belum Terverifikasi di Database",
+        lokasi: `Wilayah sekitar ${displayTitle}`,
+        mdpl: "Data Elevasi Belum Tersedia",
+        level: "Perlu Verifikasi Jalur Lokal",
+        statusPendakian: "Perlu Konfirmasi Pos / Balai Taman Nasional",
+        catatanPendakian: "Pastikan memeriksa pengumuman resmi pengelola basecamp, BKSDA, atau Taman Nasional setempat sebelum berangkat.",
+        statusGunung: "Status Aktivitas Belum Tercatat di Sistem",
+        catatanGunung: "Pantau informasi resmi aktivitas gunung api Indonesia melalui situs atau aplikasi MAGMA Indonesia (PVMBG).",
+        theme: "glacier",
+        viaResmi: [
+          "Hubungi pos basecamp resmi atau pengelola desa wisata terdekat",
+          "Periksa situs reservasi resmi Taman Nasional / BKSDA setempat"
+        ],
+        htm: "Bervariasi sesuai kebijakan pengelola kawasan konservasi atau basecamp lokal (umumnya Rp 15.000 – Rp 50.000 untuk gunung di Indonesia).",
+        karakter: `"${displayTitle}" belum tercatat secara spesifik dalam database utama SIMUNCAK. Kemungkinan nama tersebut merupakan bukit atau gunung lokal baru, variasi penulisan nama, atau gunung di luar cakupan pemetaan utama.`,
+        tips: "Selalu gunakan pemandu lokal jika jalur belum populer dan pastikan melapor kepada petugas setempat sebelum memulai pendakian."
+      };
+    }
+
+    function initMountainDatalist() {
+      const datalist = document.getElementById("mountainSuggestionsList");
+      if (!datalist) return;
+      datalist.innerHTML = Object.keys(MOUNTAIN_DATA)
+        .map(name => `<option value="${name}"></option>`)
+        .join("");
+    }
+    initMountainDatalist();
+
+    function getQuickStatusBadgeText(record) {
+      if (!record) return "Cek Info";
+      if (record.foundInDb && record.inIndonesia === true) {
+        return `Indonesia • ${record.statusPendakian.split("(")[0].trim()}`;
+      }
+      if (record.foundInDb && record.inIndonesia === false) {
+        return `Luar Negeri (${record.negara})`;
+      }
+      return "Cek Status & Lokasi";
+    }
+
+    // =========================================================================
+    // 2C. AUTOMATIC REAL MOUNTAIN PHOTO LOADER (WIKIMEDIA COMMONS API + CACHE)
+    //     Memprioritaskan Foto Gunung/Puncak Terbaru, HD & Bingkai Penuh
+    // =========================================================================
+    const MOUNTAIN_PHOTO_CACHE = {};
+
+    async function fetchRealMountainPhotoUrl(mountainTitle, wikiQuery) {
+      const cacheKey = (wikiQuery || mountainTitle || "").toLowerCase().trim();
+      if (!cacheKey) return null;
+      if (cacheKey in MOUNTAIN_PHOTO_CACHE) {
+        return MOUNTAIN_PHOTO_CACHE[cacheKey];
+      }
+
+      const cleanBase = (wikiQuery || mountainTitle || "").replace(/^Gunung\s+/i, "");
+      const searchQueries = Array.from(new Set([
+        `${wikiQuery || mountainTitle} summit peak`,
+        `${cleanBase} mountain landscape`,
+        wikiQuery,
+        mountainTitle,
+        mountainTitle.replace(/^Gunung\s+/i, "Mount ")
+      ].filter(Boolean)));
+
+      let bestCandidate = null;
+      let bestScore = -1;
+
+      for (const query of searchQueries) {
+        try {
+          const endpoint = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent("filetype:bitmap " + query)}&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|size|timestamp|extmetadata&iiurlwidth=1400&format=json&origin=*`;
+          const response = await fetch(endpoint);
+          if (!response.ok) continue;
+
+          const data = await response.json();
+          const pages = Object.values(data?.query?.pages || {});
+
+          for (const page of pages) {
+            const info = page.imageinfo?.[0];
+            if (!info || !(info.thumburl || info.url)) continue;
+
+            const urlLower = (info.url || "").toLowerCase();
+            const titleLower = (page.title || "").toLowerCase();
+            const meta = info.extmetadata || {};
+            const descText = `${meta.ImageDescription?.value || ""} ${meta.ObjectName?.value || ""} ${meta.DateTimeOriginal?.value || ""}`.toLowerCase();
+
+            // 1. Filter wajib: format foto, bukan peta/diagram/logo/arsip lawas
+            const isPhotoExt = /\.(jpe?g|png|webp)(\?|$)/i.test(urlLower);
+            const isNotGraphic = !/(map|peta|location|locator|chart|diagram|logo|flag|icon|blank|sketch|stamp|poster|book|newspaper|postcard|archive|tropenmuseum|collectie)/i.test(`${urlLower} ${titleLower} ${descText}`);
+            const isNotVintage = !/\b(18\d\d|19[0-8]\d|199\d|old|vintage|historical|historic|black and white|monochrome|sepia|eruption 19)\b/i.test(`${titleLower} ${descText}`);
+
+            // 2. Pastikan orientasi lanskap penuh (tidak setengah-setengah / portrait sempit)
+            const width = info.width || 0;
+            const height = info.height || 0;
+            const aspectRatio = height > 0 ? width / height : 1.5;
+            const isFullLandscape = width >= 800 && height >= 450 && aspectRatio >= 1.25 && aspectRatio <= 2.4;
+
+            if (!isPhotoExt || !isNotGraphic || !isNotVintage || !isFullLandscape) {
+              continue;
+            }
+
+            // 3. Sistem penilaian (skor) untuk memilih foto terbaru & puncak terbaik
+            let score = 0;
+
+            // Skor tahun unggahan / pengambilan gambar terbaru
+            const dateStr = meta.DateTimeOriginal?.value || info.timestamp || "";
+            const yearMatch = dateStr.match(/\b(20\d\d)\b/);
+            const photoYear = yearMatch ? parseInt(yearMatch[1], 10) : 2010;
+            if (photoYear >= 2022) score += 50;
+            else if (photoYear >= 2018) score += 35;
+            else if (photoYear >= 2014) score += 20;
+            else score += 5;
+
+            // Bonus jika menampilkan puncak / kawah / panorama utuh
+            if (/(puncak|summit|peak|crater|kawah|sunrise|panorama|view|ridge|savana|sabana)/i.test(`${titleLower} ${descText}`)) {
+              score += 25;
+            }
+
+            // Bonus resolusi tinggi & rasio lebar ideal (16:9 / 3:2)
+            if (width >= 1600) score += 15;
+            if (aspectRatio >= 1.33 && aspectRatio <= 1.85) score += 15;
+
+            if (score > bestScore) {
+              bestScore = score;
+              bestCandidate = info.thumburl || info.url;
+            }
+          }
+
+          // Jika sudah menemukan foto berkualitas sangat tinggi & terbaru, langsung gunakan
+          if (bestCandidate && bestScore >= 75) {
+            break;
+          }
+        } catch (err) {
+          // Lanjut ke query cadangan jika terjadi kendala jaringan
+        }
+      }
+
+      MOUNTAIN_PHOTO_CACHE[cacheKey] = bestCandidate;
+      return bestCandidate;
+    }
+
+    function hydrateRealMountainPhotos(scopeElement = document) {
+      const imgElements = scopeElement.querySelectorAll("img[data-mountain-title]");
+      imgElements.forEach(async (imgEl) => {
+        const title = imgEl.getAttribute("data-mountain-title") || "";
+        const wikiQuery = imgEl.getAttribute("data-wiki-query") || "";
+        const photoUrl = await fetchRealMountainPhotoUrl(title, wikiQuery);
+
+        if (photoUrl) {
+          imgEl.onload = () => {
+            imgEl.classList.add("is-loaded");
+          };
+          imgEl.onerror = () => {
+            imgEl.remove();
+          };
+          imgEl.src = photoUrl;
+        }
+      });
+    }
+
+    function buildAlpineMountainArtwork(theme, title, compact = false, wikiQuery = "") {
+      const palettes = {
+        azure: {
+          skyTop: "#08254b",
+          skyBottom: "#0c87f2",
+          ridge1: "#07468a",
+          ridge2: "#0269cf",
+          ridge3: "#36a3ff",
+          snow: "#f0f6ff",
+          sun: "#ffffff"
+        },
+        sapphire: {
+          skyTop: "#0c3b72",
+          skyBottom: "#36a3ff",
+          ridge1: "#08254b",
+          ridge2: "#0353a8",
+          ridge3: "#0c87f2",
+          snow: "#e0edff",
+          sun: "#f0f6ff"
+        },
+        cobalt: {
+          skyTop: "#07468a",
+          skyBottom: "#7cc2ff",
+          ridge1: "#0c3b72",
+          ridge2: "#0269cf",
+          ridge3: "#36a3ff",
+          snow: "#ffffff",
+          sun: "#e0edff"
+        },
+        glacier: {
+          skyTop: "#0353a8",
+          skyBottom: "#baddff",
+          ridge1: "#07468a",
+          ridge2: "#0c87f2",
+          ridge3: "#7cc2ff",
+          snow: "#ffffff",
+          sun: "#ffffff"
+        }
+      };
+
+      const p = palettes[theme] || palettes.azure;
+      const uid = `${theme}_${Math.random().toString(36).slice(2, 7)}`;
+      const safeTitle = title.replace(/"/g, "&quot;");
+      const safeWiki = (wikiQuery || title).replace(/"/g, "&quot;");
+
+      return `
+        <div class="relative w-full h-full overflow-hidden bg-royal-950">
+          <!-- Lapisan Dasar Ilustrasi Topografi Biru-Putih (Fallback Otomatis) -->
+          <svg class="w-full h-full object-cover" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ilustrasi ${safeTitle}">
+            <defs>
+              <linearGradient id="sky_${uid}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="${p.skyTop}" />
+                <stop offset="100%" stop-color="${p.skyBottom}" />
+              </linearGradient>
+              <radialGradient id="glow_${uid}" cx="78%" cy="28%" r="35%">
+                <stop offset="0%" stop-color="${p.sun}" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="${p.sun}" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <rect width="1200" height="420" fill="url(#sky_${uid})" />
+            <rect width="1200" height="420" fill="url(#glow_${uid})" />
+            <circle cx="930" cy="115" r="34" fill="${p.sun}" opacity="0.9" />
+            <path d="M-40,120 Q300,60 620,130 T1240,95" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.16" />
+            <path d="M-40,165 Q340,105 680,175 T1240,140" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.12" />
+            <polygon points="0,420 0,255 210,145 430,260 680,105 930,255 1120,150 1200,210 1200,420" fill="${p.ridge1}" />
+            <polygon points="680,105 622,148 655,142 680,162 708,140 738,150" fill="${p.snow}" opacity="0.7" />
+            <polygon points="210,145 168,180 195,176 210,190 232,175 252,182" fill="${p.snow}" opacity="0.55" />
+            <polygon points="0,420 0,305 290,205 550,315 810,175 1050,295 1200,235 1200,420" fill="${p.ridge2}" />
+            <polygon points="0,420 0,350 200,290 440,365 670,275 920,355 1130,295 1200,335 1200,420" fill="${p.ridge3}" opacity="0.92" />
+          </svg>
+
+          <!-- Foto Nyata Gunung dari Wikimedia Commons (Fade-In Saat Berhasil Dimuat) -->
+          <img
+            data-mountain-title="${safeTitle}"
+            data-wiki-query="${safeWiki}"
+            alt="Foto ${safeTitle}"
+            loading="lazy"
+            class="real-mountain-photo absolute inset-0 w-full h-full object-cover"
+          />
+
+          <!-- Overlay Vignette Halus untuk Keterbacaan Badge -->
+          <div class="absolute inset-0 bg-gradient-to-t from-royal-950/65 via-royal-950/10 to-royal-950/25 pointer-events-none"></div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 3. NAVIGASI 4 HALAMAN (TANPA STEPPER ATAS SESUAI KETENTUAN REDESAIN)
+    // =========================================================================
+    function goToPage(stepNumber) {
+      const pages = [
+        document.getElementById("page1"),
+        document.getElementById("page2"),
+        document.getElementById("page3"),
+        document.getElementById("page4")
+      ];
+
+      pages.forEach((pageEl, idx) => {
+        if (!pageEl) return;
+        if (idx + 1 === stepNumber) {
+          pageEl.classList.remove("hidden");
+          pageEl.classList.remove("page-animate");
+          void pageEl.offsetWidth;
+          pageEl.classList.add("page-animate");
+        } else {
+          pageEl.classList.add("hidden");
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // 4. HANDLER HALAMAN 1 -> HALAMAN 2
+    // =========================================================================
+    function handlePage1Submit(event) {
+      event.preventDefault();
+      const nameVal = document.getElementById("userNameInput").value.trim();
+      const mountainVal = document.getElementById("memorableMountainInput").value.trim();
+      const alertBox = document.getElementById("page1Alert");
+
+      if (!nameVal || !mountainVal) {
+        alertBox.classList.remove("hidden");
+        return;
+      }
+
+      alertBox.classList.add("hidden");
+      appState.userName = nameVal;
+      appState.memorableMountain = mountainVal;
+
+      document.getElementById("greetingUserName").textContent = appState.userName;
+      document.getElementById("page2MemorableMountain").textContent = appState.memorableMountain;
+
+      const dreamRecord = resolveMountainRecord(appState.memorableMountain);
+      document.getElementById("page2DreamQuickBadge").textContent = getQuickStatusBadgeText(dreamRecord);
+
+      const greetingBgEl = document.getElementById("page2GreetingBgArtwork");
+      if (greetingBgEl && dreamRecord) {
+        greetingBgEl.innerHTML = buildAlpineMountainArtwork(
+          dreamRecord.theme,
+          dreamRecord.title,
+          false,
+          dreamRecord.wikiQuery
+        );
+        hydrateRealMountainPhotos(greetingBgEl);
+      }
+
+      goToPage(2);
+    }
+
+    // =========================================================================
+    // 5. HANDLER HALAMAN 2 -> HALAMAN 3
+    // =========================================================================
+    function clearPage2Alert() {
+      const alertEl = document.getElementById("page2Alert");
+      if (alertEl) alertEl.classList.add("hidden");
+    }
+
+    function handlePage2Submit(event) {
+      event.preventDefault();
+      const jk = document.querySelector('input[name="jk"]:checked')?.value || "";
+      const usia = document.querySelector('input[name="usia"]:checked')?.value || "";
+      const pengalaman = document.querySelector('input[name="pengalaman"]:checked')?.value || "";
+      const ketinggian = document.querySelector('input[name="ketinggian"]:checked')?.value || "";
+      const jenis = document.querySelector('input[name="jenis"]:checked')?.value || "";
+
+      if (!jk || !usia || !pengalaman || !ketinggian || !jenis) {
+        document.getElementById("page2Alert").classList.remove("hidden");
+        return;
+      }
+
+      document.getElementById("page2Alert").classList.add("hidden");
+      appState.jk = jk;
+      appState.usia = usia;
+      appState.pengalaman = pengalaman;
+      appState.ketinggian = ketinggian;
+      appState.jenis = jenis;
+
+      renderPage3Results();
+      goToPage(3);
+    }
+
+    // =========================================================================
+    // 6. RENDER HALAMAN 3 (SAMBUTAN PENGALAMAN, RINGKASAN, 1 UTAMA + 4 ALTERNATIF)
+    // =========================================================================
+    function buildRecommendationReason(mountainName, info) {
+      const gayaText = LABELS.jenis[appState.jenis].toLowerCase();
+      const pengText = LABELS.pengalaman[appState.pengalaman].toLowerCase();
+      const tinggiText = LABELS.ketinggian[appState.ketinggian].toLowerCase();
+      return `Dipilih sebagai peringkat utama karena karakter medan ${mountainName} (${info.mdpl}) sangat selaras untuk pendaki dengan pengalaman "${pengText}", riwayat ketinggian "${tinggiText}", serta rencana pendakian gaya ${gayaText}.`;
+    }
+
+    function renderPage3Results() {
+      // A. Sambutan Berdasarkan Pengalaman Pendakian (Sesuai Prompt)
+      const greetingEl = document.getElementById("experienceGreetingText");
+      if (appState.pengalaman === "1") {
+        greetingEl.textContent = "Wah, kamu mau mencoba mendaki ya? Berikut hasil rekomendasi gunung untuk kamu!";
+      } else if (appState.pengalaman === "2") {
+        greetingEl.textContent = "Wow, keren! Kamu sudah pernah mendaki gunung. Berikut hasil rekomendasi untuk kamu!";
+      } else {
+        greetingEl.textContent = "Wah, luar biasa! Kamu sudah sering mendaki gunung. Berikut hasil rekomendasi untuk kamu!";
+      }
+
+      document.getElementById("resultMemorableMountainInline").textContent = appState.memorableMountain;
+
+      // B. Ringkasan 6 Parameter Pengguna
+      const paramGrid = document.getElementById("resultParameterGrid");
+      const summaryItems = [
+        { label: "Nama Pendaki", value: appState.userName },
+        { label: "Jenis Kelamin", value: LABELS.jk[appState.jk] },
+        { label: "Usia Pendaki", value: LABELS.usia[appState.usia] },
+        { label: "Pengalaman", value: LABELS.pengalaman[appState.pengalaman] },
+        { label: "Ketinggian", value: LABELS.ketinggian[appState.ketinggian] },
+        { label: "Jenis Pendakian", value: LABELS.jenis[appState.jenis] }
+      ];
+
+      paramGrid.innerHTML = summaryItems.map(item => `
+        <div class="rounded-xl bg-slateice-50/80 border border-royal-100 p-3.5 space-y-1">
+          <span class="block text-[11px] font-medium text-slateice-700">${item.label}</span>
+          <strong class="block text-xs sm:text-sm font-bold text-royal-950 truncate" title="${item.value}">${item.value}</strong>
+        </div>
+      `).join("");
+
+      // Validasi kombinasi Pengalaman & Ketinggian
+      const isValid =
+        (appState.pengalaman === "1" && appState.ketinggian === "1") ||
+        (appState.pengalaman !== "1" && appState.ketinggian !== "1");
+
+      const invalidCard = document.getElementById("invalidResultCard");
+      const validCard = document.getElementById("validResultCard");
+
+      if (!isValid) {
+        invalidCard.classList.remove("hidden");
+        validCard.classList.add("hidden");
+        return;
+      }
+
+      invalidCard.classList.add("hidden");
+      validCard.classList.remove("hidden");
+
+      const lookupKey = `${appState.usia}${appState.pengalaman}${appState.ketinggian}${appState.jenis}`;
+      const recommendedMountains = VALID_RECOMMENDATIONS_MAP[lookupKey] || [];
+      const userDreamNormalized = normalizeMountainQuery(appState.memorableMountain);
+
+      if (recommendedMountains.length === 0) return;
+
+      // C. Rekomendasi Gunung Utama (Index 0)
+      const primaryName = recommendedMountains[0];
+      const primaryInfo = MOUNTAIN_DATA[primaryName] || {
+        lokasi: "Indonesia",
+        mdpl: "- MDPL",
+        level: "Pendakian Nusantara",
+        karakter: "Destinasi pendakian gunung unggulan di Indonesia.",
+        theme: "azure"
+      };
+      const primarySafeName = primaryName.replace(/'/g, "\\'");
+      const isPrimaryDreamMatch =
+        userDreamNormalized.length >= 3 &&
+        (normalizeMountainQuery(primaryName).includes(userDreamNormalized) || userDreamNormalized.includes(normalizeMountainQuery(primaryName)));
+
+      document.getElementById("primaryRecommendationContainer").innerHTML = `
+        <article onclick="openRecommendedMountainDetail('${primarySafeName}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openRecommendedMountainDetail('${primarySafeName}');}" class="group bg-white rounded-2xl border-2 border-royal-500/80 shadow-[0_22px_50px_-15px_rgba(2,105,207,0.22)] overflow-hidden cursor-pointer transition-all hover:-translate-y-0.5">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <!-- Foto Gunung -->
+            <div class="lg:col-span-5 relative h-56 sm:h-64 lg:h-auto overflow-hidden">
+              ${buildAlpineMountainArtwork(primaryInfo.theme, primaryName, false, primaryInfo.wikiQuery)}
+              <div class="absolute bottom-4 left-4 z-10">
+                <span class="font-mono text-xs font-bold px-3 py-1 rounded-lg bg-royal-950/75 text-white backdrop-blur-xs border border-white/20">
+                  ${primaryInfo.mdpl}
+                </span>
+              </div>
+            </div>
+
+            <!-- Informasi Rekomendasi Utama -->
+            <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-5 bg-gradient-to-br from-white via-white to-royal-50/50">
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-xs sm:text-sm font-semibold text-royal-600 flex items-center gap-1.5">
+                    <i class="fa-solid fa-location-dot"></i> ${primaryInfo.lokasi}
+                  </span>
+                  ${isPrimaryDreamMatch ? `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-royal-100 text-royal-800 border border-royal-300">Sesuai Gunung Pilihanmu</span>` : ""}
+                </div>
+
+                <h3 class="font-display text-2xl sm:text-3xl font-extrabold text-royal-950 group-hover:text-royal-600 transition-colors">
+                  ${primaryName}
+                </h3>
+
+                <div class="inline-flex items-center gap-2 text-xs font-semibold text-slateice-700 bg-slateice-100 px-3 py-1.5 rounded-lg">
+                  <i class="fa-solid fa-gauge-high text-royal-600"></i>
+                  <span>Tingkat Kesulitan: ${primaryInfo.level}</span>
+                </div>
+
+                <div class="rounded-xl bg-royal-50/90 border border-royal-200/80 p-4 space-y-1">
+                  <span class="block text-[11px] font-bold uppercase tracking-wider text-royal-800">Alasan Direkomendasikan</span>
+                  <p class="text-xs sm:text-sm text-slateice-800 leading-relaxed">
+                    ${buildRecommendationReason(primaryName, primaryInfo)}
+                  </p>
+                </div>
+              </div>
+
+              <div class="pt-2 flex items-center justify-between border-t border-royal-100">
+                <span class="text-xs text-slateice-700 font-medium">Klik untuk jalur resmi, HTM &amp; peta</span>
+                <span class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-royal-700 group-hover:text-royal-900">
+                  <span>Lihat Detail Gunung</span>
+                  <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+
+      // D. Empat Rekomendasi Alternatif (Index 1..4)
+      const alternatives = recommendedMountains.slice(1, 5);
+      document.getElementById("alternativeMountainsContainer").innerHTML = alternatives.map((mountainName) => {
+        const info = MOUNTAIN_DATA[mountainName] || {
+          lokasi: "Indonesia",
+          mdpl: "- MDPL",
+          level: "Pendakian Nusantara",
+          theme: "cobalt"
+        };
+        const safeName = mountainName.replace(/'/g, "\\'");
+        const isDreamMatch =
+          userDreamNormalized.length >= 3 &&
+          (normalizeMountainQuery(mountainName).includes(userDreamNormalized) || userDreamNormalized.includes(normalizeMountainQuery(mountainName)));
+
+        return `
+          <article onclick="openRecommendedMountainDetail('${safeName}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openRecommendedMountainDetail('${safeName}');}" class="group bg-white rounded-2xl border border-royal-100 hover:border-royal-400 shadow-xs hover:shadow-lg hover:shadow-royal-600/10 overflow-hidden transition-all cursor-pointer flex flex-col">
+            <!-- Foto Gunung -->
+            <div class="relative h-44 w-full overflow-hidden">
+              ${buildAlpineMountainArtwork(info.theme, mountainName, true, info.wikiQuery)}
+              ${isDreamMatch ? `
+              <div class="absolute top-3 left-3 flex items-center gap-2 z-10">
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-royal-600 text-white shadow-xs">Pilihanmu</span>
+              </div>` : ""}
+              <div class="absolute bottom-3 right-3 z-10">
+                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-royal-950/75 text-white backdrop-blur-xs">
+                  ${info.mdpl}
+                </span>
+              </div>
+            </div>
+
+            <!-- Detail Kartu Alternatif -->
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div class="space-y-1.5">
+                <p class="text-xs font-semibold text-royal-600 flex items-center gap-1.5">
+                  <i class="fa-solid fa-location-dot"></i> ${info.lokasi}
+                </p>
+                <h4 class="font-display text-lg sm:text-xl font-bold text-royal-950 group-hover:text-royal-600 transition-colors">
+                  ${mountainName}
+                </h4>
+                <p class="text-xs text-slateice-700 font-medium pt-0.5">
+                  ${info.level}
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-royal-100 flex items-center justify-between text-xs font-bold text-royal-700 group-hover:text-royal-900">
+                <span>Detail Jalur, HTM &amp; Peta</span>
+                <i class="fa-solid fa-arrow-right text-[11px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      // Muat foto nyata untuk rekomendasi utama & keempat rekomendasi alternatif
+      hydrateRealMountainPhotos(validCard);
+    }
+
+    // =========================================================================
+    // 6B. HALAMAN 4: DETAIL GUNUNG
+    // =========================================================================
+    function openUserDreamMountainDetail(fromPage) {
+      appState.detailReturnPage = fromPage;
+      const record = resolveMountainRecord(appState.memorableMountain);
+      renderMountainDetailPage(record, {
+        sourceLabel: "Gunung Pilihan / Berkesan Anda",
+        backLabel: "Kembali"
+      });
+      goToPage(4);
+    }
+
+    function openRecommendedMountainDetail(mountainName) {
+      appState.detailReturnPage = 3;
+      const record = resolveMountainRecord(mountainName);
+      renderMountainDetailPage(record, {
+        sourceLabel: "Rekomendasi SIMUNCAK",
+        backLabel: "Kembali"
+      });
+      goToPage(4);
+    }
+
+    function handleDetailBack() {
+      goToPage(appState.detailReturnPage || 3);
+    }
+
+    function renderMountainDetailPage(record, options) {
+      if (!record) return;
+
+      document.getElementById("detailBackLabel").textContent = options.backLabel;
+      document.getElementById("detailSourcePill").textContent = options.sourceLabel;
+      const heroBanner = document.getElementById("detailHeroBanner");
+      heroBanner.innerHTML = buildAlpineMountainArtwork(record.theme, record.title, false, record.wikiQuery);
+      hydrateRealMountainPhotos(heroBanner);
+
+      document.getElementById("detailMountainName").textContent = record.title;
+      document.getElementById("detailLocation").innerHTML = `<i class="fa-solid fa-location-dot"></i> ${record.lokasi}`;
+      document.getElementById("detailLevel").textContent = record.level;
+      document.getElementById("detailMdpl").textContent = record.mdpl;
+
+      // 1. Status Keberadaan di Indonesia
+      const indoCard = document.getElementById("statusIndonesiaCard");
+      const indoStatus = document.getElementById("detailIndonesiaStatus");
+      const indoNote = document.getElementById("detailIndonesiaNote");
+
+      if (record.foundInDb && record.inIndonesia === true) {
+        indoCard.className = "rounded-xl p-4 border border-royal-200 bg-royal-50/70 space-y-1.5";
+        indoStatus.className = "font-display font-bold text-sm sm:text-base text-royal-950";
+        indoStatus.textContent = "Ada di Indonesia";
+        indoNote.textContent = `Terletak di ${record.lokasi}, Indonesia.`;
+      } else if (record.foundInDb && record.inIndonesia === false) {
+        indoCard.className = "rounded-xl p-4 border border-slateice-200 bg-slateice-50 space-y-1.5";
+        indoStatus.className = "font-display font-bold text-sm sm:text-base text-slateice-900";
+        indoStatus.textContent = `Luar Negeri (${record.negara})`;
+        indoNote.textContent = `Tidak berada di Indonesia; berlokasi di ${record.lokasi}.`;
+      } else {
+        indoCard.className = "rounded-xl p-4 border border-amber-200 bg-amber-50/60 space-y-1.5";
+        indoStatus.className = "font-display font-bold text-sm sm:text-base text-amber-900";
+        indoStatus.textContent = "Belum Tercatat di Database";
+        indoNote.textContent = "Periksa kembali ejaan nama gunung atau gunakan peta di bawah untuk verifikasi lokasi.";
+      }
+
+      // 2. Status Pendakian (Dibuka / Ditutup / Terbatas)
+      const hikeCard = document.getElementById("statusHikeCard");
+      const hikeStatus = document.getElementById("detailHikeStatus");
+      const hikeNote = document.getElementById("detailHikeNote");
+      const isClosed = /tutup|ditutup/i.test(record.statusPendakian);
+      const isRestricted = /terbatas|musiman|konfirmasi/i.test(record.statusPendakian);
+
+      if (isClosed) {
+        hikeCard.className = "rounded-xl p-4 border border-rose-200 bg-rose-50/70 space-y-1.5";
+        hikeStatus.className = "font-display font-bold text-sm sm:text-base text-rose-900";
+      } else if (isRestricted) {
+        hikeCard.className = "rounded-xl p-4 border border-amber-200 bg-amber-50/70 space-y-1.5";
+        hikeStatus.className = "font-display font-bold text-sm sm:text-base text-amber-900";
+      } else {
+        hikeCard.className = "rounded-xl p-4 border border-royal-200 bg-royal-50/70 space-y-1.5";
+        hikeStatus.className = "font-display font-bold text-sm sm:text-base text-royal-950";
+      }
+      hikeStatus.textContent = record.statusPendakian;
+      hikeNote.textContent = record.catatanPendakian;
+
+      // 3. Status Gunung (Vulkanologi / Aktivitas)
+      const volCard = document.getElementById("statusVolcanoCard");
+      const volStatus = document.getElementById("detailVolcanoStatus");
+      const volNote = document.getElementById("detailVolcanoNote");
+      const isHighAlert = /level iii|siaga|sangat aktif/i.test(record.statusGunung);
+
+      if (isHighAlert) {
+        volCard.className = "rounded-xl p-4 border border-rose-200 bg-rose-50/70 space-y-1.5";
+        volStatus.className = "font-display font-bold text-sm sm:text-base text-rose-900";
+      } else {
+        volCard.className = "rounded-xl p-4 border border-royal-200 bg-royal-50/70 space-y-1.5";
+        volStatus.className = "font-display font-bold text-sm sm:text-base text-royal-950";
+      }
+      volStatus.textContent = record.statusGunung;
+      volNote.textContent = record.catatanGunung;
+
+      // 4. Via Resmi & HTM
+      document.getElementById("detailViaList").innerHTML = (record.viaResmi || [])
+        .map(via => `
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-circle-check text-royal-600 text-xs mt-1"></i>
+            <span>${via}</span>
+          </li>
+        `).join("");
+
+      document.getElementById("detailHtmBox").innerHTML = `
+        <p class="font-bold text-royal-950 leading-relaxed">${record.htm}</p>
+        <p class="text-xs text-slateice-700 pt-1">
+          Tarif dapat berubah sewaktu-waktu mengikuti kebijakan pengelola Taman Nasional, BKSDA, atau basecamp resmi setempat.
+        </p>
+      `;
+
+      // 5. Pengetahuan & Tips
+      document.getElementById("detailKnowledge").textContent = record.karakter;
+      document.getElementById("detailTips").innerHTML = `<strong class="text-royal-950">Catatan Persiapan:</strong> ${record.tips}`;
+
+      // 6. Peta Google Maps
+      const mapQuery = encodeURIComponent(`${record.title} ${record.foundInDb ? record.lokasi : ""}`.trim());
+      document.getElementById("detailMapsIframe").src = `https://maps.google.com/maps?q=${mapQuery}&t=p&z=12&ie=UTF8&iwloc=&output=embed`;
+      document.getElementById("detailMapsExternalLink").href = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+    }
+
+    // =========================================================================
+    // 7. RESET TOTAL DARI BERANDA
+    // =========================================================================
+    function restartFromHome() {
+      document.getElementById("userProfileForm").reset();
+      document.getElementById("mountainForm").reset();
+      document.getElementById("page1Alert").classList.add("hidden");
+      document.getElementById("page2Alert").classList.add("hidden");
+      document.getElementById("detailMapsIframe").src = "";
+
+      appState.userName = "";
+      appState.memorableMountain = "";
+      appState.jk = "";
+      appState.usia = "";
+      appState.pengalaman = "";
+      appState.ketinggian = "";
+      appState.jenis = "";
+      appState.detailReturnPage = 3;
+
+      goToPage(1);
+    }
+  </script>
+</body>
+</html>
